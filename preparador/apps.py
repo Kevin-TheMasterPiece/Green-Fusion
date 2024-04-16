@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PrepaparadorConfig(AppConfig):
+class PreparadorConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'prepaparador'
+    name = 'preparador'
