@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
+from administrador.models import ensaladas
 
 # Create your models here.
 class cliente (models.Model):
@@ -20,7 +21,7 @@ class cliente (models.Model):
         super().save(*args, **kwargs)
 
 class putuacion (models.Model):
-    num_estrellas = models.IntegerField(max_length=1)
+    num_estrellas = models.IntegerField()
     comentario = models.CharField(max_length=50)
     FK_ced_client = models.ForeignKey(cliente, on_delete=models.CASCADE)
 
@@ -28,6 +29,16 @@ class reclamo (models.Model):
     des_recla = models.CharField(max_length=50)
     fecha_reclamo = models.DateField
     FK_ced_client = models.ForeignKey(cliente, on_delete=models.CASCADE)
-    #falta imagen reclamo
+    foto_reclamo = models.ImageField(upload_to='reclamos/')
    
+class factura (models.Model):
+    fecha_factura = models.DateField
+    FK_ced_client = models.ForeignKey(cliente, on_delete=models.CASCADE)
+    total = models.FloatField
+
+class factura_ensalda (models.Model):
+    FK_factura = models.ForeignKey(factura, on_delete=models.CASCADE)
+    FK_ensalada = models.ForeignKey(ensaladas, on_delete=models.CASCADE)
+    tamaño = models.CharField(max_length=10)
+    subtotal = models.FloatField
 
