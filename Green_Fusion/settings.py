@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'preparador',
     'administrador',
-    'store'
+    'store', 
+    'gerente'
     
 ]
 
