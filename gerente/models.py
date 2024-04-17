@@ -13,7 +13,7 @@ class empleado(models.Model):
     direc_emp = models.CharField(max_length=30)
     ciudad_emp = models.CharField(max_length=20)
     foto_emp = models.ImageField(upload_to='empleado/')
-    ID_Rol = models.ForeignKey(rol, on_delete=models.CASCADE)
+    FK_ID_Rol = models.ForeignKey(rol, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         # Verificar si la contraseña ya está hasheada
