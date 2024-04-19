@@ -8,10 +8,11 @@ class cliente (models.Model):
     ced_client = models.AutoField(primary_key=True)
     nom_client = models.CharField(max_length=20)
     correo_client = models.CharField(max_length=30)
-    contraseña_client = models.CharField(max_length=128)
+    contrasena_client = models.CharField(max_length=128)
     tel_client = models.CharField(max_length=10)
     direc_client = models.CharField(max_length=30)
     ciudad_client = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, default='')
 
     def save(self, *args, **kwargs):
         # Verificar si la contraseña ya está hasheada
