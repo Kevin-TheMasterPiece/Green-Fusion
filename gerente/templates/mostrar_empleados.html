@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Empleados</title>
+</head>
+<body>
+    <h1>Listado de Empleados</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Ciudad</th>
+                <th>Rol</th>
+                <th>Contraseña</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empleado in empleados %}
+            <tr>
+                <td>{{ empleado.cedula }}</td>
+                <td>{{ empleado.nom_emp }}</td>
+                <td>{{ empleado.correo_emp }}</td>
+                <td>{{ empleado.tel_emp }}</td>
+                <td>{{ empleado.direc_emp }}</td>
+                <td>{{ empleado.ciudad_emp }}</td>
+                <td>{{ empleado.FK_ID_Rol_id}}</td>
+                <td>{{ empleado.contrasena}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
