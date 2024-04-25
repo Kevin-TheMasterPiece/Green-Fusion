@@ -12,7 +12,7 @@ def iniciar_sesion(request):
                 empleado_existente = empleado.objects.get(cedula=cedula)  # Busca el empleado por cédula
                 if empleado_existente.contrasena == contrasena:
                     if empleado_existente.FK_ID_Rol_id == 0: #INICIO GERENTE
-                        return redirect('mostrar_empleados')  # Redirige si la contraseña coincide
+                        return redirect('reportes')  # Redirige si la contraseña coincide
                     elif empleado_existente.FK_ID_Rol_id == 1: #INICIO ADMINISTRADOR
                         return redirect('Vista_Admin')  # Redirige si la contraseña coincide
                     elif empleado_existente.FK_ID_Rol_id == 2: #INICIO PREPARADOR
@@ -26,7 +26,8 @@ def iniciar_sesion(request):
     else:
         form = LoginForm()
     return render(request, 'iniciar_sesion.html', {'form': form})
-
+def reportes(request):
+    return render(request, 'reportes.html')
 def mostrar_empleados(request):
     empleados = empleado.objects.all()
     return render(request, 'mostrar_empleados.html', {'empleados': empleados})
