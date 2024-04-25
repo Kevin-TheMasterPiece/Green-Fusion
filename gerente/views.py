@@ -11,7 +11,12 @@ def iniciar_sesion(request):
             try:
                 empleado_existente = empleado.objects.get(cedula=cedula)  # Busca el empleado por cédula
                 if empleado_existente.contrasena == contrasena:
-                    return redirect('mostrar_empleados')  # Redirige si la contraseña coincide
+                    if empleado_existente.FK_ID_Rol_id == 0: #INICIO GERENTE
+                        return redirect('mostrar_empleados')  # Redirige si la contraseña coincide
+                    elif empleado_existente.FK_ID_Rol_id == 1: #INICIO ADMINISTRADOR
+                        return redirect('Vista_Admin')  # Redirige si la contraseña coincide
+                    elif empleado_existente.FK_ID_Rol_id == 2: #INICIO PREPARADOR
+                        return redirect('pedidos')  # Redirige si la contraseña coincide
                 else:
                     # Contraseña incorrecta
                     return render(request, 'iniciar_sesion.html', {'form': form, 'error_message': 'Contraseña incorrecta'})

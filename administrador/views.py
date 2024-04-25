@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
 # Create your views here.
-def hola (request):
-    return render(request,'logInempl.html')
+def Vista_Admin (request):
+    return render(request,'Vista_Admin.html')

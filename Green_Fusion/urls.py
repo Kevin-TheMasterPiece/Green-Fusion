@@ -21,6 +21,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('gerente/', include('gerente.urls')),  # Incluye las URLs de la aplicación "gerente"
+    path('administrador/', include('administrador.urls')),  # Incluye las URLs de la aplicación "administrador"
+    path('preparador/', include('preparador.urls')),  # Incluye las URLs de la aplicación "preparador"
+
 ]
 
 
