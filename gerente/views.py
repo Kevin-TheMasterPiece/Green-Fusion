@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm, EmpleadoForm
 from .models import empleado
 from django.http import JsonResponse
-from django.http import JsonResponse
 from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
 import base64
+from django.shortcuts import get_object_or_404
 
 
 def iniciar_sesion(request):
@@ -74,3 +74,44 @@ def buscar_empleado(request):
         except empleado.DoesNotExist:
             return JsonResponse({'error': 'Empleado no encontrado'}, status=404)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def editar_empleado(request):
+    if request.method == 'GET':
+        # Obtener los datos del formulario
+        cedula = request.GET.get('cedula')
+        nombreNueva = request.GET.get('nombre')
+        correoNueva = request.GET.get('correo')
+        telefonoNueva = request.GET.get('telefono')
+        direccionNueva = request.GET.get('direccion')
+        ciudadNueva = request.GET.get('ciudad')
+        contrasenaNueva = request.GET.get('contrasena')
+
+
+        if None not in (cedula, nombreNueva, correoNueva, telefonoNueva, direccionNueva, ciudadNueva):
+            try:
+                # Buscar el empleado por su cédula
+                empleado_obj = empleado.objects.get(cedula=cedula)
+                
+                # Actualizar los datos del empleado
+                empleado_obj.nom_emp = nombreNueva
+                empleado_obj.correo_emp = correoNueva
+                empleado_obj.tel_emp = telefonoNueva
+                empleado_obj.direc_emp = direccionNueva
+                empleado_obj.ciudad_emp = ciudadNueva
+                empleado_obj.contrasena = contrasenaNueva
+
+                empleado_obj.save()
+
+                # Retornar una respuesta indicando que la edición fue exitosa
+                return JsonResponse({'success': True, 'message': 'Empleado actualizado correctamente'})
+            except empleado.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'Empleado no encontrado'}, status=404)
+            except Exception as e:
+                # Retornar una respuesta indicando que ocurrió un error
+                return JsonResponse({'success': False, 'message': 'Se produjo un error: {}'.format(str(e))})
+        else:
+            # Retornar una respuesta indicando que falta algún parámetro
+            return JsonResponse({'error': 'Faltan parámetros en la solicitud'}, status=400)
+    else:
+        # Retornar una respuesta indicando que el método no está permitido
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
