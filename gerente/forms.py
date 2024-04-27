@@ -12,7 +12,7 @@ class EmpleadoForm(forms.ModelForm):
             'cedula': forms.TextInput(attrs={'class': 'form-control'}),
             'nom_emp': forms.TextInput(attrs={'class': 'form-control'}),
             'correo_emp': forms.EmailInput(attrs={'class': 'form-control'}),
-            'contrasena': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'contrasena': forms.TextInput(attrs={'class': 'form-control'}),
             'tel_emp': forms.TextInput(attrs={'class': 'form-control'}),
             'direc_emp': forms.TextInput(attrs={'class': 'form-control'}),
             'ciudad_emp': forms.TextInput(attrs={'class': 'form-control'}),
