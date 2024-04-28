@@ -249,7 +249,6 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
                   </ul>
                 </div>
             
-                
                 <div class="container">
                   <main>
                     <form method="POST" enctype="multipart/form-data" class="my-form">
@@ -258,6 +257,13 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
                         <h2>Registro</h2>
                         <p class="text-success">Registro de Administradores</p>
                       </div>
+                      {% if messages %}
+                      <ul class="messages">
+                        {% for message in messages %}
+                          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
                       <div class="row g-3">
                         <div class="col-md-6">
                           <label for="id_nombre" class="form-label">Nombre:</label>

@@ -5,6 +5,7 @@ from .models import empleado
 from django.http import JsonResponse
 from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
 import base64
+from django.contrib import messages
 
 
 def iniciar_sesion(request):
@@ -39,17 +40,21 @@ def empleados(request):
 def crear_empleado(request):
     if request.method == 'POST':
         form = EmpleadoForm(request.POST, request.FILES)
-        if form.is_valid():
+        cedula = form.data.get('cedula')  # Cambia de cleaned_data a data
+        if empleado.objects.filter(cedula=cedula).exists():
+            messages.error(request, 'La cédula ya está registrada.')
+            form = EmpleadoForm(request.POST, request.FILES)
+        elif form.is_valid():
             form.save()
-            return redirect('empleados')  # Redirigir a la página de lista de empleados
+            return redirect('empleados')
+        else:
+            messages.error(request, 'Hubo un error al procesar el formulario. Por favor, revise los datos e inténtelo de nuevo.')
     else:
         form = EmpleadoForm()
     return render(request, 'crear_empleado.html', {'form': form})
 
 def consultar_admin(request):
     return render(request, 'consultar_admin.html')
-
-
 
 def buscar_empleado(request):
     if request.method == 'GET' and 'cedula' in request.GET:
