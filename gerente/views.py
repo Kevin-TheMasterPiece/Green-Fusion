@@ -4,7 +4,6 @@ from .models import empleado
 from django.http import JsonResponse
 from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
 import base64
-from django.shortcuts import get_object_or_404
 
 
 def iniciar_sesion(request):
@@ -85,33 +84,51 @@ def editar_empleado(request):
         direccionNueva = request.GET.get('direccion')
         ciudadNueva = request.GET.get('ciudad')
         contrasenaNueva = request.GET.get('contrasena')
-
-
-        if None not in (cedula, nombreNueva, correoNueva, telefonoNueva, direccionNueva, ciudadNueva):
-            try:
+        
+        try:
                 # Buscar el empleado por su cédula
                 empleado_obj = empleado.objects.get(cedula=cedula)
-                
-                # Actualizar los datos del empleado
-                empleado_obj.nom_emp = nombreNueva
-                empleado_obj.correo_emp = correoNueva
-                empleado_obj.tel_emp = telefonoNueva
-                empleado_obj.direc_emp = direccionNueva
-                empleado_obj.ciudad_emp = ciudadNueva
-                empleado_obj.contrasena = contrasenaNueva
 
-                empleado_obj.save()
+                # Verificar si algún campo nuevo es None o una cadena vacía
+                if nombreNueva is not None and nombreNueva.strip() != '':
+                    empleado_obj.nom_emp = nombreNueva
+                if correoNueva is not None and correoNueva.strip() != '':
+                    empleado_obj.correo_emp = correoNueva
+                if telefonoNueva is not None and telefonoNueva.strip() != '':
+                    empleado_obj.tel_emp = telefonoNueva
+                if direccionNueva is not None and direccionNueva.strip() != '':
+                    empleado_obj.direc_emp = direccionNueva
+                if ciudadNueva is not None and ciudadNueva.strip() != '':
+                    empleado_obj.ciudad_emp = ciudadNueva
+                if contrasenaNueva is not None and contrasenaNueva.strip() != '':
+                    empleado_obj.contrasena = contrasenaNueva
 
+                empleado_obj.save()  # Guardar los cambios en la base de datos
                 # Retornar una respuesta indicando que la edición fue exitosa
-                return JsonResponse({'success': True, 'message': 'Empleado actualizado correctamente'})
-            except empleado.DoesNotExist:
-                return JsonResponse({'success': False, 'message': 'Empleado no encontrado'}, status=404)
-            except Exception as e:
-                # Retornar una respuesta indicando que ocurrió un error
-                return JsonResponse({'success': False, 'message': 'Se produjo un error: {}'.format(str(e))})
-        else:
-            # Retornar una respuesta indicando que falta algún parámetro
-            return JsonResponse({'error': 'Faltan parámetros en la solicitud'}, status=400)
+                return redirect('empleados')  # Redirigir a la página de lista de empleados
+        except empleado.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'El empleado no existe'})
+        except Exception as e:
+            return JsonResponse({'Error': 'Se produjo un error'}, status=404)
     else:
-        # Retornar una respuesta indicando que el método no está permitido
+        return JsonResponse({'Error': 'Método no permitido'}, status=405)
+    
+
+
+def eliminar_empleado(request):
+    if request.method == 'GET':
+        cedula = request.GET.get('cedula')  # Obtener la cédula del empleado a eliminar
+        try:
+            # Buscar el empleado por su cédula
+            empleado_obj = empleado.objects.get(cedula=cedula)
+            empleado_obj.delete()  # Eliminar el empleado de la base de datos
+           
+            return JsonResponse({'success': True, 'message': 'Empleado eliminado correctamente'})
+        except empleado.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'El empleado no existe'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+    

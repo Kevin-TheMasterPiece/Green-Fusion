@@ -14,8 +14,4 @@ class empleado(models.Model):
     FK_ID_Rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
-        # Aquí puedes agregar lógica adicional antes de guardar el objeto
-        # Por ejemplo, validar datos, realizar operaciones adicionales, etc.
-        
-        # Llamar al método save() del modelo base para guardar el objeto
         super(empleado, self).save(*args, **kwargs)
