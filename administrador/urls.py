@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .views import  Vista_Admin, consultar_prep, crear_prep, Modificar_prep, buscar_preparador, editar_preparador, eliminar_preparador
+from .views import  Vista_Admin, consultar_prep, crear_prep, Modificar_prep, buscar_preparador, editar_preparador, eliminar_preparador, consultar_prov, crear_prov, Modificar_prov, buscar_prov, editar_prov, eliminar_prov
 
 urlpatterns = [
     path('Vista_Admin/', Vista_Admin, name='Vista_Admin'),
+    
     path('consultar_prep/', consultar_prep, name='consultar_prep'),
     path('crear_prep/', crear_prep, name='crear_prep'),
     path('Modificar_prep/', Modificar_prep, name='Modificar_prep'),
@@ -26,6 +27,12 @@ urlpatterns = [
     path('editar_empleado/', editar_preparador, name='editar_empleado'),
     path('eliminar_empleado/', eliminar_preparador, name='eliminar_empleado'),
 
+    path('consultar_prov/', consultar_prov, name='consultar_prov'),
+    path('crear_prov/', crear_prov, name='crear_prov'),
+    path('Modificar_prov/', Modificar_prov, name='Modificar_prov'),
+    path('buscar_prov/', buscar_prov, name='buscar_prov'),
+    path('editar_prov/', editar_prov, name='editar_prov'),
+    path('eliminar_prov/', eliminar_prov, name='eliminar_prov'),
 ]
 
 

@@ -1,6 +1,6 @@
 from django import forms
 from gerente.models import empleado
-
+from .models import proveedor
 class PreparadorForm(forms.ModelForm):
     class Meta:
         model = empleado
@@ -15,4 +15,17 @@ class PreparadorForm(forms.ModelForm):
             'ciudad_emp': forms.TextInput(attrs={'class': 'form-control'}),
             'foto_emp': forms.FileInput(attrs={'class': 'form-control'}),
             'FK_ID_Rol': forms.HiddenInput(attrs={'value': '2'}),  # Si deseas mantener este campo oculto
+        }
+class ProveedorForm(forms.ModelForm):
+    class Meta:
+        model = proveedor
+        fields = ['nit', 'nom_prov', 'correo_prov', 'tel_prov', 'ciudad_prov', 'desc_prov']
+        widgets = {
+            'nit': forms.TextInput(attrs={'class': 'form-control'}),
+            'nom_prov': forms.TextInput(attrs={'class': 'form-control'}),
+            'correo_prov': forms.EmailInput(attrs={'class': 'form-control'}),
+            'tel_prov': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad_prov': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_prov': forms.TextInput(attrs={'class': 'form-control'}),
+
         }

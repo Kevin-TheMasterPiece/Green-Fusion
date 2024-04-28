@@ -1,7 +1,8 @@
 import os
 from django.shortcuts import render, redirect
-from .forms import  PreparadorForm
-from gerente.models import empleado 
+from .forms import  PreparadorForm, ProveedorForm
+from gerente.models import empleado
+from .models import proveedor 
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -28,10 +29,10 @@ def crear_prep(request):
         form = PreparadorForm()
     return render(request, 'Registro.Prep.html', {'form': form})
 
-def consultar_prep(request):
-    
+def consultar_prep(request):    
     empleados = empleado.objects.all()
     return render(request, 'listadoprep.html', {'empleados': empleados})
+
 def Modificar_prep(request):
     return render(request, 'Modificar.prep.html')
 
@@ -60,7 +61,7 @@ def buscar_preparador(request):
                 return JsonResponse(data)
             else:
                 return JsonResponse({'error': 'Empleado no encontrado'}, status=404)
-        except Empleado.DoesNotExist:
+        except empleado.DoesNotExist:
             return JsonResponse({'error': 'Empleado no encontrado'}, status=404)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
@@ -103,9 +104,6 @@ def editar_preparador(request):
     else:
         return JsonResponse({'Error': 'Método no permitido'}, status=405)
     
-
-
-
 def eliminar_preparador(request):
     if request.method == 'GET':
         cedula = request.GET.get('cedula')  # Obtener la cédula del empleado a eliminar
@@ -125,6 +123,97 @@ def eliminar_preparador(request):
             return JsonResponse({'success': True, 'message': 'Empleado eliminado correctamente'})
         except empleado.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'El empleado no existe'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def crear_prov(request):
+    if request.method == 'POST':
+        form = ProveedorForm(request.POST, request.FILES)  # Utiliza ProveedorForm en lugar de PreparadorForm
+        nit = form.data.get('nit')
+        if proveedor.objects.filter(nit=nit).exists():  # Cambia de empleado a proveedor
+            messages.error(request, 'Proveedor ya registrado.')
+            form = ProveedorForm(request.POST, request.FILES)  # Utiliza ProveedorForm nuevamente
+        elif form.is_valid():
+            form.save()
+            return redirect('consultar_prov')
+        else:
+            messages.error(request, 'Hubo un error al procesar el formulario. Por favor, revise los datos e inténtelo de nuevo.')
+    else:
+        form = ProveedorForm()  # Utiliza ProveedorForm en lugar de PreparadorForm
+    return render(request, 'Registro_prov.html', {'form': form})
+
+
+def consultar_prov(request):    
+    proveedores = proveedor.objects.all()
+    return render(request, 'listadoprov.html', {'proveedores': proveedores})
+
+def Modificar_prov(request):
+    return render(request, 'Modificar_prov.html')
+
+from django.core.exceptions import ObjectDoesNotExist
+
+def buscar_prov(request):
+    if request.method == 'GET' and 'nit' in request.GET:
+        nit = request.GET['nit']
+        try:
+            proveedor_obj = proveedor.objects.get(nit=nit)
+
+            data = {
+                'nit': proveedor_obj.nit,
+                'nom_prov': proveedor_obj.nom_prov,
+                'correo_prov': proveedor_obj.correo_prov,
+                'tel_prov': proveedor_obj.tel_prov,
+                'ciudad_prov': proveedor_obj.ciudad_prov,
+                'desc_prov': proveedor_obj.desc_prov,
+            }
+            return JsonResponse(data)
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Proveedor no encontrado'}, status=404)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+def editar_prov(request):
+    if request.method == 'GET':
+        nit = request.GET.get('nit')
+        nombre = request.GET.get('nombre_prov')
+        correo = request.GET.get('correo_prov')
+        telefono = request.GET.get('telefono_prov')
+        ciudad = request.GET.get('ciudad_prov')
+        descripcion = request.GET.get('desc_prov')
+
+        try:
+            proveedor_obj = proveedor.objects.get(nit=nit)
+            if nombre:
+                proveedor_obj.nom_prov = nombre
+            if correo:
+                proveedor_obj.correo_prov = correo
+            if telefono:
+                proveedor_obj.tel_prov = telefono
+            if ciudad:
+                proveedor_obj.ciudad_prov = ciudad
+            if descripcion:
+                proveedor_obj.desc_prov = descripcion
+
+            proveedor_obj.save()
+            return redirect('consultar_prov')  # Redirigir a la página de lista de empleados
+        except proveedor.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Proveedor no encontrado'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def eliminar_prov(request):
+    if request.method == 'GET':
+        nit = request.GET.get('nit')
+        try:
+            proveedor_obj = proveedor.objects.get(nit=nit)
+            proveedor_obj.delete()
+            return JsonResponse({'success': True, 'message': 'Proveedor eliminado correctamente'})
+        except proveedor.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Proveedor no encontrado'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
     else:
