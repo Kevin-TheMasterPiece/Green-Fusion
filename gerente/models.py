@@ -14,4 +14,5 @@ class empleado(models.Model):
     FK_ID_Rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
+       
         super(empleado, self).save(*args, **kwargs)

@@ -200,36 +200,39 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
         </div>
       </div>
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <h1>Listado de Empleados</h1>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Cédula</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Ciudad</th>
-                    <th>Rol</th>
-                    <th>Contraseña</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for empleado in empleados %}
-                <tr>
-                    <td>{{ empleado.cedula }}</td>
-                    <td>{{ empleado.nom_emp }}</td>
-                    <td>{{ empleado.correo_emp }}</td>
-                    <td>{{ empleado.tel_emp }}</td>
-                    <td>{{ empleado.direc_emp }}</td>
-                    <td>{{ empleado.ciudad_emp }}</td>
-                    <td>{{ empleado.FK_ID_Rol_id}}</td>
-                    <td>{{ empleado.contrasena}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-      </main>
+        <div class="container mt-5">
+            <h1 class="mb-4">Listado de Empleados</h1>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Rol</th>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for empleado in empleados %}
+                        {% if empleado.FK_ID_Rol.id != 0 %}
+                          <tr>
+                              <td>{{ empleado.FK_ID_Rol.nom_Rol }}</td>
+                              <td>{{ empleado.cedula }}</td>
+                              <td>{{ empleado.nom_emp }}</td>
+                              <td>{{ empleado.correo_emp }}</td>
+                              <td>{{ empleado.tel_emp }}</td>
+                          </tr>
+                          {% endif %} 
+                      {% endfor %}
+                      
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    
     </div>
   </div>
 
