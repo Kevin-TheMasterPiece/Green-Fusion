@@ -274,10 +274,6 @@
                               <div class="mb-3">
                                   <input type="text" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña">
                               </div>
-                              <div class="mb-3">
-                                <label for="fotoe" class="form-label">Foto empleado:</label>
-                                <input type="file" id="fotoe" name="fotoe" class="form-control" placeholder="Foto Empleado">
-                            </div>
                               <button type="submit" class="btn btn-success mr-2">Guardar Cambios</button>
                               <button type="button" class="btn btn-secondary" id="cancelarBtn">Cancelar</button>
                           </form>
@@ -370,7 +366,6 @@
       var direccion = document.getElementById('direccion').value;
       var ciudad = document.getElementById('ciudad').value;
       var contrasena = document.getElementById('contrasena').value;
-      var fotoe = document.getElementById('fotoe').value;
   
       console.log("Cedula:", cedula);
       console.log("Nombre:", nombre);
@@ -379,7 +374,6 @@
       console.log("Direccion:", direccion);
       console.log("Ciudad:", ciudad);
       console.log("contrasena:", contrasena);
-      console.log("fotoe:", fotoe);
   
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       var data = {
@@ -390,7 +384,6 @@
           direccion: direccion,
           ciudad: ciudad,
           contrasena: contrasena,
-          fotoe: fotoe,
           'csrfmiddlewaretoken': csrftoken
       };
   
