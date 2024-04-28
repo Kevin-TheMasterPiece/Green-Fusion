@@ -4,7 +4,8 @@ from .models import empleado
 from django.http import JsonResponse
 from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
 import base64
-
+from django.conf import settings
+import os
 
 def iniciar_sesion(request):
     if request.method == 'POST':
@@ -121,8 +122,14 @@ def eliminar_empleado(request):
         try:
             # Buscar el empleado por su cédula
             empleado_obj = empleado.objects.get(cedula=cedula)
-            empleado_obj.delete()  # Eliminar el empleado de la base de datos
-           
+            # Obtener la ruta del archivo de imagen
+            ruta_imagen = empleado_obj.foto_emp.path
+            # Eliminar el objeto empleado de la base de datos
+            empleado_obj.delete()
+            # Eliminar el archivo de imagen de la carpeta de medios si existe
+            if os.path.exists(ruta_imagen):
+                os.remove(ruta_imagen)
+                           
             return JsonResponse({'success': True, 'message': 'Empleado eliminado correctamente'})
         except empleado.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'El empleado no existe'})

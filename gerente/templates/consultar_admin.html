@@ -370,6 +370,8 @@
       var direccion = document.getElementById('direccion').value;
       var ciudad = document.getElementById('ciudad').value;
       var contrasena = document.getElementById('contrasena').value;
+      var fotoe = document.getElementById('fotoe').value;
+  
       console.log("Cedula:", cedula);
       console.log("Nombre:", nombre);
       console.log("Correo:", correo);
@@ -377,8 +379,10 @@
       console.log("Direccion:", direccion);
       console.log("Ciudad:", ciudad);
       console.log("contrasena:", contrasena);
+      console.log("fotoe:", fotoe);
+  
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        var data = {
+      var data = {
           cedula: cedula,
           nombre: nombre,
           correo: correo,
@@ -386,16 +390,16 @@
           direccion: direccion,
           ciudad: ciudad,
           contrasena: contrasena,
-
+          fotoe: fotoe,
           'csrfmiddlewaretoken': csrftoken
       };
-      fetch('/gerente/editar_empleado/', {
-          method: 'get',
+  
+      fetch('/gerente/editar_empleado/?' + new URLSearchParams(data), {
+          method: 'GET',
           headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': csrftoken
-          },
-          body: JSON.stringify(data)
+          }
       })
       .then(response => {
           if (response.ok) {
@@ -404,17 +408,16 @@
           throw new Error('Error en la solicitud');
       })
       .then(data => {
-        if (data.success) {
-            // Mostrar un mensaje de éxito
-            alert(data.message);
-            // Redirigir a otra página
-            window.location.href = '/gerente/empleados/';
-        } else {
-            // Mostrar un mensaje de error si es necesario
-            alert('Error: ' + data.message);
-        }
-    })
-    
+          if (data.success) {
+              // Mostrar un mensaje de éxito
+              alert(data.message);
+              // Redirigir a otra página
+              window.location.href = '/gerente/empleados/';
+          } else {
+              // Mostrar un mensaje de error si es necesario
+              alert('Error: ' + data.message);
+          }
+      })
       .catch(error => {
           console.error('Error:', error);
           var mensajeError = document.getElementById('mensajeError');
@@ -422,6 +425,7 @@
           mensajeError.style.display = 'block';
       });
   });
+  
 
 
   document.getElementById('eliminarBtn').addEventListener('click', function() {
