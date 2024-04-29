@@ -23,9 +23,9 @@ urlpatterns = [
     path('consultar_prep/', consultar_prep, name='consultar_prep'),
     path('crear_prep/', crear_prep, name='crear_prep'),
     path('Modificar_prep/', Modificar_prep, name='Modificar_prep'),
-    path('buscar_empleado/', buscar_preparador, name='buscar_empleado'),
-    path('editar_empleado/', editar_preparador, name='editar_empleado'),
-    path('eliminar_empleado/', eliminar_preparador, name='eliminar_empleado'),
+    path('buscar_empleado/', buscar_preparador, name='buscar_prep'),
+    path('editar_empleado/', editar_preparador, name='editar_prep'),
+    path('eliminar_empleado/', eliminar_preparador, name='eliminar_prep'),
 
     path('consultar_prov/', consultar_prov, name='consultar_prov'),
     path('crear_prov/', crear_prov, name='crear_prov'),
