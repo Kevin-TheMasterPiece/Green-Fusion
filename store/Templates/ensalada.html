@@ -1,16 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <script src="color-modes.js"></script>
+    <script src="{% static 'color-modes.js' %}"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Ensalada</title>
+    <title>{{ensalada_detalle.nom_ensalada}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -97,7 +97,7 @@
 
     <nav class="py-2 bg-success ">
         <div class="container d-flex flex-wrap">
-            <h1 class="nav me-auto"><a class="text-decoration-none text-white" href="index.html">GREEN FUSION</a></h1>
+            <h1 class="nav me-auto"><a class="text-decoration-none text-white" href="{% url 'store:mostrar_ensaladas' %}">GREEN FUSION</a></h1>
 
             <ul class="nav">
                 <li class="nav-item"><a href="login.html" class="nav-link link-body-emphasis px-2"> <button
@@ -126,44 +126,18 @@
             <div class="row">
                 <div class="col-md-6 order-md-1">
 
-                    <div id="carouselImages" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="https://images.aws.nestle.recipes/resized/69e14ff7a1b1fea5d3976defa9d4903a_CPK_cesar_a-hero_1080_850.jpg"
-                                    alt="" width="100%" height="500px">
-                            </div>
-
-
-                            <div class="carousel-item">
-
-                                <img src="https://www.gourmet.cl/wp-content/uploads/2016/09/Ensalada_C%C3%A9sar-web-553x458.jpg"
-                                    alt="" width="100%" height="500px">
-
-                            </div>
-
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselImages"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-
-
+                    <img src="{{ensalada_detalle.image}}"
+                        alt="" width="100%" height="500px" style="border-radius: 10px;">
+                            
                 </div>
 
                 <div class="col-md-6 order-md-2">
 
                     <h2>
-                        Ensalada Cesar
+                        {{ensalada_detalle.nom_ensalada}}
                     </h2>
                     <h4 class="text-body-secondary">
-                        Ensalada Gourmet
+                        {{ensalada_detalle.categoria}}
                     </h4>
                     <h5 class="text-body-secondary">
                         Tamaño: 

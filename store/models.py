@@ -21,6 +21,9 @@ class cliente (models.Model):
             self.contrasena_emp = make_password(self.contrasena_emp)
         super().save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return self.nom_client
+
 class putuacion (models.Model):
     num_estrellas = models.IntegerField()
     comentario = models.CharField(max_length=50)
@@ -35,11 +38,11 @@ class reclamo (models.Model):
 class factura (models.Model):
     fecha_factura = models.DateField
     FK_ced_client = models.ForeignKey(cliente, on_delete=models.CASCADE)
-    total = models.FloatField
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
 class factura_ensalda (models.Model):
     FK_factura = models.ForeignKey(factura, on_delete=models.CASCADE)
     FK_ensalada = models.ForeignKey(ensaladas, on_delete=models.CASCADE)
     tamaño = models.CharField(max_length=10)
-    subtotal = models.FloatField
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
