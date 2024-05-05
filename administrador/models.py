@@ -6,7 +6,7 @@ class ingrediente (models.Model):
     nom_ing = models.CharField(max_length=20)
     cant_gramos= models.FloatField()
     cant_min = models.FloatField(verbose_name='Cantidad minima (gramos)')
-    precio_min = models.FloatField()
+    precio_min = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     activo = models.BooleanField(default=True)
     image = models.CharField(max_length=200, default='')
 
@@ -19,6 +19,7 @@ class ensaladas (models.Model):
      activo = models.BooleanField(default=True) #para desactuvar una ensalda y borrarla de la base de datos
      image = models.CharField(max_length=200, default='')
      categoria = models.CharField(max_length=50, default='')
+     ingredientes = models.ManyToManyField(ingrediente, through='recetas')
 
      def get_absolute_url(self):
         return reverse('store:detalles_ensalada',

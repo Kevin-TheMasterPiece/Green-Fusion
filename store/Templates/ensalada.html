@@ -142,17 +142,28 @@
                     <h5 class="text-body-secondary">
                         Tamaño: 
                     </h5>
-                    <select name="" id="">
-                        <option disabled selected value="">selecciona un tamaño</option>
-                        <option value="">Pequeña</option>
-                        <option value="">Mediana</option>
-                        <option value="">Grande</option>
-                    </select>
-                    <br><br>
-                    <p class="lead">Descripcion</p>
+                    <form method="get">
+                        
+                        <label for="tamano">Selecciona un tamaño:</label>
+                        <select name="tamaño" id="tamaño" onchange="this.form.submit()">
+                            <option value="disabled" disabled selected>Elige un tamaño</option>
+                            <option value="pequeña" {% if tamaño == 'pequeña' %}selected{% endif %}>Pequeña</option>
+                            <option value="mediana" {% if tamaño == 'mediana' %}selected{% endif %}>Mediana</option>
+                            <option value="grande" {% if tamaño == 'grande' %}selected{% endif %}>Grande</option>
+                        </select>
+                        
+                    </form>
+                    <br>
+                    <p>Ingredientes:</p>
+                    <ul>
+                        {% for ingrediente in ingredientes %}
+                        <li>{{ ingrediente.nom_ing }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h5 class="text-body-secondary">Cantidad total (Gramos): {{peso}} g</h5>
                     <h2>
-                        $7.500
-                    
+                       $ {{ precio_base }}
+                    </h2>
                     <br><br>
                     <div class="d-flex gap-3 col-7 mx-auto">
                         <button onclick="window.location.href='carrito.html'" type="button"
