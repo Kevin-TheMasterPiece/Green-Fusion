@@ -255,6 +255,39 @@ def eliminar_producto(request):
     else:
         return HttpResponse(json.dumps({'success': False, 'message': 'Método no permitido'}), content_type='application/json')
 
+from django.http import JsonResponse
+
+def editar_producto(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        nom_ing = request.GET.get('nom_ing')
+        cant_gramos = request.GET.get('cant_gramos')
+        cant_min = request.GET.get('cant_min')
+        precio_min = request.GET.get('precio_min')
+        imagen = request.GET.get('imagen')
+
+        try:
+            ingrediente_editado = ingrediente.objects.get(ID_ing=id_producto)
+            if nom_ing:
+                ingrediente_editado.nom_ing = nom_ing
+            if cant_gramos:
+                ingrediente_editado.cant_gramos = cant_gramos
+            if cant_min:
+                ingrediente_editado.cant_min = cant_min
+            if precio_min:
+                ingrediente_editado.precio_min = precio_min
+            if imagen:
+                ingrediente_editado.image = imagen
+
+            ingrediente_editado.save()
+            return JsonResponse({'success': True})
+        except ingrediente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Error al editar: ingrediente no encontrado.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
 
 def gestion_recetario(request):
     return render(request, 'botones.html')
