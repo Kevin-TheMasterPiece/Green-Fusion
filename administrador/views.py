@@ -289,6 +289,9 @@ def editar_producto(request):
         return JsonResponse({'success': False, 'message': 'Método no permitido'})
 
 
+def prov_produc(request):
+    return render(request, 'prov_produc.html')
+
 def gestion_recetario(request):
     return render(request, 'botones.html')
 
