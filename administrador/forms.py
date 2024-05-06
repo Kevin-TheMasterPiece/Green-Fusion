@@ -1,6 +1,6 @@
 from django import forms
 from gerente.models import empleado
-from .models import proveedor
+from .models import proveedor, ingrediente
 class PreparadorForm(forms.ModelForm):
     class Meta:
         model = empleado
@@ -29,3 +29,22 @@ class ProveedorForm(forms.ModelForm):
             'desc_prov': forms.TextInput(attrs={'class': 'form-control'}),
 
         }
+class IngredienteForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
+    cant_gramos = forms.DecimalField(
+        widget=forms.TextInput(attrs={'type': 'number', 'step': '0.01', 'min': '0'}),
+    )
+    cant_min = forms.DecimalField(
+        widget=forms.TextInput(attrs={'type': 'number', 'step': '0.01', 'min': '0'}),
+    )
+    precio_min = forms.DecimalField(
+        widget=forms.TextInput(attrs={'type': 'number', 'step': '0.01', 'min': '0'}),
+    )
+
+    class Meta:
+        model = ingrediente
+        fields = ['ID_ing', 'nom_ing', 'cant_gramos', 'cant_min', 'precio_min', 'image']

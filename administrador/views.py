@@ -1,12 +1,14 @@
 import os
 from django.shortcuts import render, redirect
-from .forms import  PreparadorForm, ProveedorForm
+from .forms import  PreparadorForm, ProveedorForm, IngredienteForm
 from gerente.models import empleado
-from .models import proveedor 
+from .models import proveedor, ingrediente 
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import base64
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -144,7 +146,6 @@ def crear_prov(request):
         form = ProveedorForm()  # Utiliza ProveedorForm en lugar de PreparadorForm
     return render(request, 'Registro_prov.html', {'form': form})
 
-
 def consultar_prov(request):    
     proveedores = proveedor.objects.all()
     return render(request, 'listadoprov.html', {'proveedores': proveedores})
@@ -152,7 +153,6 @@ def consultar_prov(request):
 def Modificar_prov(request):
     return render(request, 'Modificar_prov.html')
 
-from django.core.exceptions import ObjectDoesNotExist
 
 def buscar_prov(request):
     if request.method == 'GET' and 'nit' in request.GET:
@@ -218,3 +218,77 @@ def eliminar_prov(request):
             return JsonResponse({'success': False, 'message': str(e)})
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def gestion_inventario(request):
+    return render(request, 'botones2.html')
+def agregar_producto(request):
+    if request.method == 'POST':
+        form = IngredienteForm(request.POST, request.FILES)
+        ID_ing = form.data.get('ID_ing')  # Cambia de cleaned_data a data
+        if ingrediente.objects.filter(ID_ing=ID_ing).exists():
+            messages.error(request, 'Producto ya registrado.')
+            form = IngredienteForm(request.POST, request.FILES)
+        elif form.is_valid():
+            form.save()
+            return redirect('consultar_producto')
+        else:
+            messages.error(request, 'Hubo un error al procesar el formulario. Por favor, revise los datos e inténtelo de nuevo.')
+    else:
+        form = IngredienteForm()
+    return render(request, 'agregar_producto.html', {'form': form})
+def consultar_producto(request):    
+    ingredientes = ingrediente.objects.all()
+    return render(request, 'producto.html', {'ingredientes': ingredientes})
+from django.shortcuts import HttpResponse
+import json
+def eliminar_producto(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        try:
+            Ingrediente = ingrediente.objects.get(ID_ing=id_producto)
+            Ingrediente.delete()
+            return HttpResponse(json.dumps({'success': True}), content_type='application/json')
+        except ingrediente.DoesNotExist:
+            return HttpResponse(json.dumps({'success': False, 'message': 'El ingrediente no existe.'}), content_type='application/json')
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False, 'message': str(e)}), content_type='application/json')
+    else:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Método no permitido'}), content_type='application/json')
+
+from django.http import JsonResponse
+
+def editar_producto(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        nom_ing = request.GET.get('nom_ing')
+        cant_gramos = request.GET.get('cant_gramos')
+        cant_min = request.GET.get('cant_min')
+        precio_min = request.GET.get('precio_min')
+        imagen = request.GET.get('imagen')
+
+        try:
+            ingrediente_editado = ingrediente.objects.get(ID_ing=id_producto)
+            if nom_ing:
+                ingrediente_editado.nom_ing = nom_ing
+            if cant_gramos:
+                ingrediente_editado.cant_gramos = cant_gramos
+            if cant_min:
+                ingrediente_editado.cant_min = cant_min
+            if precio_min:
+                ingrediente_editado.precio_min = precio_min
+            if imagen:
+                ingrediente_editado.image = imagen
+
+            ingrediente_editado.save()
+            return JsonResponse({'success': True})
+        except ingrediente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Error al editar: ingrediente no encontrado.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
+
+def gestion_recetario(request):
+    return render(request, 'botones.html')
+
