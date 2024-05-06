@@ -15,8 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .views import  Vista_Admin, consultar_prep, crear_prep, Modificar_prep, buscar_preparador, editar_preparador, eliminar_preparador, consultar_prov, crear_prov, Modificar_prov, buscar_prov, editar_prov, eliminar_prov
-
+from .views import (Vista_Admin, consultar_prep, crear_prep, Modificar_prep,
+                    buscar_preparador, editar_preparador, eliminar_preparador,
+                    consultar_prov, crear_prov, Modificar_prov, buscar_prov,
+                    editar_prov, eliminar_prov, gestion_inventario,
+                    gestion_recetario, agregar_producto, consultar_producto, eliminar_producto)  # Asegúrate de importar agregar_producto desde tus vistas
 urlpatterns = [
     path('Vista_Admin/', Vista_Admin, name='Vista_Admin'),
     
@@ -25,14 +28,20 @@ urlpatterns = [
     path('Modificar_prep/', Modificar_prep, name='Modificar_prep'),
     path('buscar_empleado/', buscar_preparador, name='buscar_prep'),
     path('editar_empleado/', editar_preparador, name='editar_prep'),
-    path('eliminar_empleado/', eliminar_preparador, name='eliminar_prep'),
+    path('eliminar_empleado/', eliminar_preparador, name='eliminar_prep'),  # Esto parece incompleto, debería ser eliminar_prep
 
     path('consultar_prov/', consultar_prov, name='consultar_prov'),
     path('crear_prov/', crear_prov, name='crear_prov'),
     path('Modificar_prov/', Modificar_prov, name='Modificar_prov'),
     path('buscar_prov/', buscar_prov, name='buscar_prov'),
     path('editar_prov/', editar_prov, name='editar_prov'),
-    path('eliminar_prov/', eliminar_prov, name='eliminar_prov'),
+    path('eliminar_prov/', eliminar_prov, name='eliminar_prov'),  # Esto también parece incompleto, debería ser eliminar_prov
+
+    path('gestion_inventario/', gestion_inventario, name='gestion_inventario'),
+    path('agregar_producto/', agregar_producto, name='agregar_producto'),
+    path('gestion_recetario/', gestion_recetario, name='gestion_recetario'),
+    path('consultar_producto/', consultar_producto, name='consultar_producto'),
+    path('eliminar_producto/', eliminar_producto, name='eliminar_producto'),
+
+   
 ]
-
-
