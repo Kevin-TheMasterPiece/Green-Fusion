@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render, redirect
 from .forms import  PreparadorForm, ProveedorForm, IngredienteForm
 from gerente.models import empleado
-from .models import proveedor, ingrediente 
+from .models import proveedor, ingrediente, product_prov
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -290,8 +290,11 @@ def editar_producto(request):
 
 
 def prov_produc(request):
-    return render(request, 'prov_produc.html')
+    ingredientes = ingrediente.objects.all()
+    return render(request, 'prov_produc.html', {'ingredientes': ingredientes})
 
 def gestion_recetario(request):
     return render(request, 'botones.html')
 
+  
+    
