@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="{% static 'color-modes.js' %}"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'personalizada.css' %}">
+</head>
+<body>
+    <h2>Crea tu ensalada personalizada</h2>
+
+  <div class="seleccion-categorias">
+    <div class="categoria">
+      <h4>Verduras:</h4>
+      <select id="verduras" class="select-ingrediente">
+        {% for vegetal in vegetales %}
+          <option value="{{ vegetal.nom_ing }}">{{ vegetal.nom_ing }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="categoria">
+      <h4>Frutas:</h4>
+      <select id="frutas" class="select-ingrediente">
+        {% for fruta in frutas %}
+          <option value="{{ fruta.nom_ing }}">{{ fruta.nom_ing}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="seleccion-tamano">
+    <h3>Elige el tamaño de tu ensalada:</h3>
+    <select id="tamano" class="select-tamano">
+      <option value="">Selecciona un tamaño</option>
+      <option value="pequena">Pequeña</option>
+      <option value="mediana">Mediana</option>
+      <option value="grande">Grande</option>
+    </select>
+  </div>
+
+  <div class="ensalada-seleccionada">
+    <h3>Tu ensalada seleccionada:</h3>
+    <ul id="lista-ingredientes"></ul>
+    <button id="finalizar-pedido">Finalizar pedido</button>
+    <div class="precio-ensalada">
+      <h3>Precio de tu ensalada:</h3>
+      <span id="precio">0 €</span>
+    </div>
+  </div>
+
+  <script src="{% static 'script.js' %}"></script>
+</body>
+</html>

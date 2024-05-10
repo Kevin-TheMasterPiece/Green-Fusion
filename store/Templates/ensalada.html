@@ -165,13 +165,15 @@
                        $ {{ precio_base }}
                     </h2>
                     <br><br>
-                    <div class="d-flex gap-3 col-7 mx-auto">
-                        <button onclick="window.location.href='carrito.html'" type="button"
-                            class="btn btn-primary">Agregar al carrito</button>
-                        <button onclick="window.location.href='checkout.html'" type="button"
+                    
+                        <form action="{% url "cart:cart_add" ensalada_detalle.ID_ensalada precio_base tamaño %}" method="post">
+                            {{ cart_product_form }}
+                            {% csrf_token %}
+                            <br>
+                            <input type="submit"  class="btn btn-primary" value="Agregar al carrito">
+                            <button onclick="window.location.href='checkout.html'" type="button"
                             class="btn btn-primary">Comprar ahora</button>
-
-                    </div>
+                          </form>
 
                 </div>
 

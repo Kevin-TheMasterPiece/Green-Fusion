@@ -1,0 +1,66 @@
+.seleccion-categorias {
+    display: flex;
+    flex-direction: row; /* Disposición horizontal */
+    justify-content: space-between; /* Distribuir el espacio entre los selects */
+    margin-bottom: 20px;
+  }
+  
+  .categoria {
+    flex-basis: 45%; /* Ajustar el ancho de los selects */
+  }
+  
+  
+  
+  .select-ingrediente,
+  .select-tamano {
+    width: 200px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .ensalada-seleccionada {
+    position: relative;
+  }
+  
+  #lista-ingredientes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 300px;
+    overflow-y: scroll;
+  }
+  
+  #lista-ingredientes li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  #finalizar-pedido {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Estilos responsivos */
+  
+  @media (max-width: 768px) {
+    .seleccion-categorias {
+      flex-direction: column;
+    }
+  
+    .categoria {
+      flex-basis: 100%;
+    }
+  }
+  

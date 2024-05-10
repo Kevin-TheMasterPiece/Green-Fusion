@@ -1,6 +1,8 @@
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404
-from administrador.models import ensaladas
+from administrador.models import ensaladas, ingrediente
+from cart.forms import CartAddProductForm
+
 
 def mostrar_ensaladas (request, busqueda_nombre = None):#Va a mostrar las ensaldas
     ensalada_enc = None
@@ -13,8 +15,8 @@ def mostrar_ensaladas (request, busqueda_nombre = None):#Va a mostrar las ensald
                   {'ensalada_enc': ensalada_enc,
                    'ensalada': ensalada})
 
-def detalles_ensalada (request, id, nombre_ensalada):
-    ensalada_detalle = get_object_or_404(ensaladas, ID_ensalada = id, nom_ensalada = nombre_ensalada, activo = True)
+def detalles_ensalada (request, ID_ensalada, nombre_ensalada):
+    ensalada_detalle = get_object_or_404(ensaladas, ID_ensalada = ID_ensalada, nom_ensalada = nombre_ensalada, activo = True)
     ingredientes = ensalada_detalle.ingredientes.all()
 
     # Inicializa el tamaño en 'pequeña' como valor predeterminado
@@ -37,10 +39,26 @@ def detalles_ensalada (request, id, nombre_ensalada):
         precio_base *= 3 
         peso *= 3
 #mostrar cuanto pesa la ensalada
+
+    cart_product_form = CartAddProductForm()
+
     return render(request, 'ensalada.html',
                   {'ensalada_detalle': ensalada_detalle,
                    'ingredientes' : ingredientes,
                    'precio_base': precio_base,
                    'tamaño': tamaño,
-                   'peso': peso})
+                   'peso': peso,
+                   'cart_product_form': cart_product_form})
+
+def armar_ensalada(request):
+
+    frutas = ingrediente.objects.filter(categoria = 'Frutas')
+    vegetales = ingrediente.objects.filter(categoria= 'Vegetales')
+
+    contexto = {
+        'frutas': frutas,
+        'vegetales': vegetales
+    }
+
+    return render(request, 'personalizada.html', contexto)
 

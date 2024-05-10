@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from administrador.models import ensaladas
+from django.utils import timezone
 
 # Create your models here.
 class cliente (models.Model):
@@ -31,7 +32,7 @@ class putuacion (models.Model):
 
 class reclamo (models.Model):
     des_recla = models.CharField(max_length=50)
-    fecha_reclamo = models.DateField
+    fecha_reclamo = models.DateField(default=timezone.now)
     FK_ced_client = models.ForeignKey(cliente, on_delete=models.CASCADE)
     foto_reclamo = models.ImageField(upload_to='reclamos/')
    

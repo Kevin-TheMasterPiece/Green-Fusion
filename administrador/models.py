@@ -9,6 +9,7 @@ class ingrediente (models.Model):
     precio_min = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     activo = models.BooleanField(default=True)
     image = models.CharField(max_length=200, default='')
+    categoria = models.CharField(max_length=30, default='')
 
     def __str__(self) -> str:
         return self.nom_ing

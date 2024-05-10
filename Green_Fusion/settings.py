@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'preparador',
     'administrador',
     'store', 
-    'gerente'
+    'gerente',
+    'cart'
     
 ]
 import os
@@ -140,3 +141,4 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+CART_SESSION_ID = 'cart'
