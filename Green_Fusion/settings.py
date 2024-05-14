@@ -41,9 +41,15 @@ INSTALLED_APPS = [
     'administrador',
     'store', 
     'gerente',
-    'cart'
-    
+    'cart',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -142,3 +148,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CART_SESSION_ID = 'cart'
+
+#Variables de redireccion login y logout
+LOGIN_REDIRECT_URL = 'store:mostrar_ensaladas'
+LOGOUT_REDIRECT_URL = 'store:mostrar_ensaladas'

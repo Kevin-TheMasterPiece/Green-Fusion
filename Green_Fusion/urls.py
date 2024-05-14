@@ -26,7 +26,8 @@ urlpatterns = [
     path('administrador/', include('administrador.urls')),  # Incluye las URLs de la aplicación "administrador"
     path('preparador/', include('preparador.urls')),  # Incluye las URLs de la aplicación "preparador"
     path('cart/', include('cart.urls', namespace='cart')),
-    path('', include('store.urls'))# Incluye las URLs de la aplicación "store"
+    path('', include('store.urls')),# Incluye las URLs de la aplicación "store"
+    path('accounts/', include('django.contrib.auth.urls')),
     
     #FALTA MOSTRAR LAS ENSALADAS
 

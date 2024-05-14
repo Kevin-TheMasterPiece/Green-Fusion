@@ -1,8 +1,13 @@
 from decimal import Decimal
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from administrador.models import ensaladas, ingrediente
 from cart.forms import CartAddProductForm
-
+from django.contrib.auth.decorators import login_required
+from .models import reclamo
+from .forms import ReclamoForm, CustomUserCreationForm
+from django.utils import timezone
+from django.contrib.auth import logout, authenticate, login
+from django.contrib import messages
 
 def mostrar_ensaladas (request, busqueda_nombre = None):#Va a mostrar las ensaldas
     ensalada_enc = None
@@ -62,3 +67,59 @@ def armar_ensalada(request):
 
     return render(request, 'personalizada.html', contexto)
 
+@login_required
+def crear_reclamo(request):
+    if request.method == 'POST':
+        form = ReclamoForm(request.POST, request.FILES)
+        if form.is_valid():
+            reclamo_obj = form.save(commit=False)
+            # Asignar la fecha actual
+            reclamo_obj.fecha_reclamo = timezone.now().date()
+            # Asignar el cliente a la llave foránea
+            reclamo_obj.FK_ced_client = request.user
+            # Guardar el reclamo
+            reclamo_obj.save()
+            return redirect('store:crear_reclamo')
+    else:
+        form = ReclamoForm()
+
+    # Obtén los reclamos del usuario actual
+    reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)
+
+
+
+    return render(request, 'crear_reclamo.html', {'form': form,
+                                                  'reclamos_usuario': reclamos_usuario})
+
+def borrar_reclamo(request, reclamo_id):
+    reclamo_obj = get_object_or_404(reclamo, pk=reclamo_id)
+    if request.method == 'POST':
+        reclamo_obj.delete()
+        return redirect('store:crear_reclamo')
+    return render(request, 'crear_reclamo.html', {'reclamo_borrar': reclamo_obj})
+
+
+#def login (request):
+    #return render(request, 'registration/login.html')
+
+def exit (request):
+    logout(request)
+    return redirect('store:mostrar_ensaladas')
+
+def registrer (request):
+    data = {
+        'form': CustomUserCreationForm()
+    }
+    if request.method == 'POST':
+        user_creation_form = CustomUserCreationForm(data=request.POST)
+
+        if user_creation_form.is_valid():
+            user_creation_form.save()
+
+            user = authenticate(username=user_creation_form.cleaned_data['username'], password=user_creation_form.cleaned_data['password1'])
+            login(request, user)
+            return redirect('store:mostrar_ensaladas')
+        else:
+            data['form'] = user_creation_form
+
+    return render(request, 'registration/register.html', data)

@@ -6,6 +6,7 @@ PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 10)]
 
 class CartAddProductForm(forms.Form):
     quantity = forms.TypedChoiceField(
+                                label='Cantidad',
                                 choices=PRODUCT_QUANTITY_CHOICES,
                                 coerce=int)
     override = forms.BooleanField(required=False,

@@ -108,7 +108,7 @@
                                 <form action="{% url "cart:cart_add" product.ID_ensalada item.price item.tamaño %}" method="post">
                                     {{ item.update_quantity_form.quantity }}
                                     {{ item.update_quantity_form.override }}
-                                    <input type="submit" value="Update">
+                                    <input type="submit" value="Actualizar">
                                     {% csrf_token %}
                                   </form>
                             </span>
@@ -116,7 +116,7 @@
                             <span class="text-body-secondary">{{item.price}}</span>
                             <span>
                                 <form action="{% url "cart:cart_remove" product.ID_ensalada %}" method="post">
-                                    <input type="submit"  class="btn btn-danger" value="Remove">
+                                    <input type="submit"  class="btn btn-danger" value="Eliminar">
                                     {% csrf_token %}
                                   </form>
                             </span>
@@ -135,8 +135,7 @@
                     <button onclick="window.location.href='checkout.html'" type="submit"
                         class="btn btn-secondary">Pagar</button>
 
-                    <button onclick="window.location.href='index.html'" type="submit"
-                        class="btn btn-success">Volver</button>
+                    <a href="{%  url 'store:mostrar_ensaladas' %}" class="btn btn-success">Volver</a>
 
                 </div>
 
