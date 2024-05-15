@@ -1,5 +1,5 @@
 from django import forms
-from .models import reclamo
+from .models import reclamo, factura
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -25,7 +25,17 @@ class CustomUserCreationForm(UserCreationForm):
 			raise forms.ValidationError('Este correo electrónico ya está registrado')
 		return email
               
-              
+class FacturaCreateForm(forms.ModelForm):
+    class Meta:
+        model = factura
+        fields = ['nom_client', 'apell_client', 'direccion',
+                  'city'] 
+        labels = {
+            'nom_client': 'Nombre',
+            'apell_client': 'Apellido',
+            'direccion': 'Direccion de envio',
+            'city': 'ciudad'
+        }           
     
 	
 	

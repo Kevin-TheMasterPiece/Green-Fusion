@@ -11,5 +11,6 @@ urlpatterns = [
     path('exit/', views.exit, name='exit'),
     path('reclamos/<int:reclamo_id>/borrar/', views.borrar_reclamo, name='borrar_reclamo'),
     path('register/', views.registrer, name='registrer'),
+    path('create/', views.factura_create, name='factura_create'),
     #FALTA HACER BARRA DE BUSQUEDA EN INDEX
 ]

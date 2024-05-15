@@ -3,22 +3,26 @@ from django.shortcuts import render, get_object_or_404, redirect
 from administrador.models import ensaladas, ingrediente
 from cart.forms import CartAddProductForm
 from django.contrib.auth.decorators import login_required
-from .models import reclamo
-from .forms import ReclamoForm, CustomUserCreationForm
+from .models import reclamo, factura_ensalda
+from .forms import ReclamoForm, CustomUserCreationForm, FacturaCreateForm
 from django.utils import timezone
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
+#from .tasks import order_created
+from cart.cart import Cart
 
 def mostrar_ensaladas (request, busqueda_nombre = None):#Va a mostrar las ensaldas
     ensalada_enc = None
     ensalada = ensaladas.objects.filter(activo = True)
+    ens_perso = ensaladas.objects.filter(ID_ensalada = 1)
     if busqueda_nombre:#Si hay una busqueda va a hacer el filtro y mostrar la ensalda a buscar
         ensalada_enc = get_object_or_404(ensaladas, nom_ensalada = busqueda_nombre)
         ensalada = ensalada.filter(nom_ensalada = ensalada_enc)
     
     return render(request, 'index.html', 
                   {'ensalada_enc': ensalada_enc,
-                   'ensalada': ensalada})
+                   'ensalada': ensalada,
+                   'ens_perso': ens_perso})
 
 def detalles_ensalada (request, ID_ensalada, nombre_ensalada):
     ensalada_detalle = get_object_or_404(ensaladas, ID_ensalada = ID_ensalada, nom_ensalada = nombre_ensalada, activo = True)
@@ -29,7 +33,7 @@ def detalles_ensalada (request, ID_ensalada, nombre_ensalada):
     
     # Si es una solicitud POST, obtén el tamaño seleccionado por el usuario
     if request.method == 'GET':
-        tamaño = request.GET.get('tamaño', 'disabled')
+        tamaño = request.GET.get('tamaño', 'disabled')#cambiar el disabled por pequeña para ver si al agregar al carrito sin seleccionar un tamño lo toma como pequeño
     
     # Calcula el precio base de la ensalada
     precio_base = sum(ingrediente.precio_min for ingrediente in ingredientes)
@@ -123,3 +127,33 @@ def registrer (request):
             data['form'] = user_creation_form
 
     return render(request, 'registration/register.html', data)
+
+#FACTURAS
+
+def factura_create(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        form = FacturaCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.FK_ced_client = request.user
+            order.save()
+            for item in cart:
+                factura_ensalda.objects.create(FK_factura=order,
+                                        FK_ensalada=item['product'],
+                                        subtotal=item['price'],
+                                        quantity=item['quantity'],
+                                        tamaño = item['tamaño'],
+                                        )
+            # clear the cart
+            cart.clear()
+            # launch asynchronous task
+            #order_created.delay(order.id)
+            return render(request,
+                          'created_factura.html',
+                          {'order': order})
+    else:
+        form = FacturaCreateForm()
+    return render(request,
+                  'checkout.html',
+                  {'cart': cart, 'form': form})

@@ -80,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -152,3 +153,13 @@ CART_SESSION_ID = 'cart'
 #Variables de redireccion login y logout
 LOGIN_REDIRECT_URL = 'store:mostrar_ensaladas'
 LOGOUT_REDIRECT_URL = 'store:mostrar_ensaladas'
+
+#envio de correos django
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'greenfusionFaca@outlook.com'
+EMAIL_HOST_PASSWORD = 'ncxcwiadrhbwcpgi' 
+
