@@ -129,7 +129,7 @@ def registrer (request):
     return render(request, 'registration/register.html', data)
 
 #FACTURAS
-
+@login_required
 def factura_create(request):
     cart = Cart(request)
     if request.method == 'POST':

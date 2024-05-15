@@ -107,10 +107,17 @@
                 <div class="col-md-5 col-lg-4 order-md-last">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Tu carrito</span>
-                    {% for item in cart %}
-                        <span class="badge bg-primary rounded-pill">{{ item.quantity }}</span>
+                    
+                        {% with total_items=cart|length %}
+                            {% if total_items > 0 %}
+                            <span id="contador-productos" class="badge bg-primary rounded-pill">{{ total_items }}</span>
+                            {% elif not order %}
+                            0
+                            {% endif %}
+                        {% endwith %}
                     </h4>
                     <ul class="list-group mb-3">
+                    {% for item in cart %}
                         <li class="list-group-item d-flex justify-content-between lh-sm">
                             <div>
                                 <h6 class="my-0">{{ item.product.nom_ensalada }}</h6>
@@ -132,10 +139,26 @@
                 </div>
                 <div class="col-md-7 col-lg-8">
                     <form method="post" class="needs-validation">
-                        {{ form.as_p }}
-                        <p><input type="submit" value="Realizar pedido"></p>
                         {% csrf_token %}
-                      </form>
+                        <div class="mb-3">
+                            <label for="{{ form.nom_client.id_for_label }}" class="form-label">{{ form.nom_client.label }}</label><br>
+                            {{ form.nom_client }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.apell_client.id_for_label }}" class="form-label">{{ form.apell_client.label }}</label><br>
+                            {{ form.apell_client }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.direccion.label }}</label><br>
+                            {{ form.direccion }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">{{ form.city.label }}</label><br>
+                            {{ form.city }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Realizar pedido</button>
+                    </form>
+                    
 
                 </div>
             </div>
