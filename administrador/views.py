@@ -337,6 +337,31 @@ def editar_product_prov(request):
         return JsonResponse({'success': False, 'message': 'Método no permitido'})
 
 
+def agregar_product_prov(request):
+    if request.method == 'GET':
+        nuevo_proveedor_id = request.GET.get('proveedor')
+        nuevo_ingrediente_id = request.GET.get('ingrediente')
+        nuevo_precio = request.GET.get('precio')
+        
+        try:
+            nuevo_proveedor = proveedor.objects.get(nit=nuevo_proveedor_id)
+            nuevo_ingrediente = ingrediente.objects.get(ID_ing=nuevo_ingrediente_id)
+            
+            nuevo_proveedor_ingrediente = product_prov(
+                FK_nit_prov =nuevo_proveedor,
+                FK_ID_ing=nuevo_ingrediente,
+                precio_prov=nuevo_precio
+            )
+            nuevo_proveedor_ingrediente.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
+
+
 def gestion_recetario(request):
     return render(request, 'botones.html')
 

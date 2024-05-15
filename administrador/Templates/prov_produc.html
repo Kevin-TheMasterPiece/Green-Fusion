@@ -186,18 +186,20 @@
                             <tr>
                                 <th>Codigo</th>
                                 <th>Nombre</th>
-                                <th>Cantidad mínima</th>
-                                <th>Cantidad en gramos</th>
+                                <th>Cant. mín </th>
+                                <th>Cant. Actual </th>
                             </tr>
                         </thead>
                         <tbody id="productBody">
                             {% for ingrediente in ingredientes %}
+                            {% if ingrediente.cant_gramos <= ingrediente.cant_min %}
                             <tr id="fila-{{ ingrediente.ID_ing }}">
                                 <td>{{ ingrediente.ID_ing }}</td>
                                 <td>{{ ingrediente.nom_ing }}</td>
                                 <td>{{ ingrediente.cant_min }}</td>
                                 <td>{{ ingrediente.cant_gramos }}</td>
                             </tr>
+                            {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -210,26 +212,28 @@
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-md-3">
-                        <select class="form-select mb-3" aria-label="Seleccionar proveedor">
-                          <option selected>Seleccionar proveedor</option>
+                        <select id="proveedorSelect" class="form-select mb-3" aria-label="Seleccionar proveedor">
+                          <option selected disabled>Seleccionar proveedor</option>
                             {% for proveedor in proveedores %}
                                 <option value="{{ proveedor.nit }}">{{ proveedor.nom_prov}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3">
-                      <select class="form-select mb-3" aria-label="Seleccionar ingrediente">
-                        <option selected>Seleccionar ingrediente</option>
+                      <select id="ingredienteSelect" class="form-select mb-3" aria-label="Seleccionar ingrediente">
+                        <option selected disabled> Seleccionar ingrediente</option>
                         {% for ingrediente in ingredientes %}
                             <option value="{{ ingrediente.ID_ing }}">{{ ingrediente.nom_ing }}</option>
                         {% endfor %}
                       </select>
+                    </div>
                     
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" id="precioInput" placeholder="Precio por bulto" min="0" step="0.01">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" class="form-control" id="precio" placeholder="Precio por bulto" min="0" step="0.01">
-                    </div>
-                    
+                      <button id="agregarBtn" class="btn btn-success">Agregar</button>
+                    </div>
 
                 </div>
                 <table id="productTable" class="table">
@@ -313,6 +317,7 @@
 </main>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+      
       var idProductoEditar; // Variable global para almacenar el ID del producto a editar
       
       // Manejar clic en el botón "Editar"
@@ -401,6 +406,43 @@
       });
   });
   
+  document.getElementById('agregarBtn').addEventListener('click', function() {
+    var proveedorId = document.getElementById('proveedorSelect').value;
+    var ingredienteId = document.getElementById('ingredienteSelect').value;
+    var precio = document.getElementById('precioInput').value;
+
+    var csrftoken = document.getElementById('csrfToken').value; // Obtener el valor del token CSRF
+    var data = {
+        proveedor: proveedorId,
+        ingrediente: ingredienteId,
+        precio: precio,
+        csrfmiddlewaretoken: csrftoken
+    };
+
+    // Construir la URL con los parámetros de los datos
+    var url = '/administrador/agregar_product_prov/?' + new URLSearchParams(data);
+
+    fetch(url, {
+        method: 'GET', // El método GET es por defecto, pero puedes dejarlo explícitamente si lo prefieres
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken // Asegúrate de que esto obtenga el token CSRF correcto desde Django
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Proveedor-ingrediente agregado exitosamente.');
+            location.reload(); // Recargar la página para mostrar los cambios actualizados
+        } else {
+            throw new Error('Error al agregar proveedor-ingrediente.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Se produjo un error al intentar agregar el proveedor-ingrediente.');
+    });
+});
+
 </script>
     <script src="{% static 'color-modes.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
