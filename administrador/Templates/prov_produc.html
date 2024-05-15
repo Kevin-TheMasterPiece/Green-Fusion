@@ -176,7 +176,7 @@
     <div class="container-fluid pb-3">
         <div class="row">
             <div class="col-md-4">
-                <div class="bg-body-tertiary border rounded-3">
+                <div class="bg-body-tertiary border rounded-0">
                     <div class="py-3 text-center">
                         <h2>POR TERMINAR</h2>
                         <p class="text-success">Productos con cantidades mínimas</p>
@@ -204,16 +204,111 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="bg-body-tertiary border rounded-3">
-                    <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalChoice">
-                        <div class="modal-dialog" role="document">
-                            <!-- Contenido del segundo contenedor -->
+              <div class="container">
+                <div class="py-3 text-center">
+                    <h2>Proveedor-Ingrediente</h2>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <select class="form-select mb-3" aria-label="Seleccionar proveedor">
+                            <option selected>Seleccionar proveedor</option>
+                            <!-- Aquí se deben agregar las opciones de proveedores -->
+                            <option value="proveedor1">Proveedor 1</option>
+                            <option value="proveedor2">Proveedor 2</option>
+                            <option value="proveedor3">Proveedor 3</option>
+                            <!-- Agrega más opciones según sea necesario -->
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select mb-3" aria-label="Seleccionar ingrediente">
+                            <option selected>Seleccionar ingrediente</option>
+                            <!-- Aquí se deben agregar las opciones de ingredientes -->
+                            <option value="ingrediente1">Ingrediente 1</option>
+                            <option value="ingrediente2">Ingrediente 2</option>
+                            <option value="ingrediente3">Ingrediente 3</option>
+                            <!-- Agrega más opciones según sea necesario -->
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" id="precio" placeholder="Precio por bulto" min="0" step="0.01">
+                    </div>
+                    <div class="col-md-3">
+                      <button class="btn btn-success editarBtn" data-id="{{ ingrediente.ID_ing }}" data-bs-toggle="modal" data-bs-target="#editarModal">Agregar</button>
+                    </div>
+
+                </div>
+                <table id="productTable" class="table">
+                  <table id="productTable" class="table">
+                    <thead class="thead-success">
+                        <tr>
+                            <th>Proveedor</th>
+                            <th>Celular</th>
+                            <th>Ingrediente</th>
+                            <th>Precio por bulto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productBody">
+                        {% for product_prov in product_provs %}
+                        <tr id="fila-{{ product_prov.id }}">
+                            <td>{{ product_prov.FK_nit_prov}}</td>
+                            <td>{{ product_prov.FK_nit_prov.tel_prov}}</td>
+                            <td>{{ product_prov.FK_ID_ing }}</td>
+                            <td>{{ product_prov.precio_prov }}</td>
+                            <td>
+                              <button class="btn btn-success btn-sm editarBtn" data-id="{{product_prov.id }}" data-bs-toggle="modal" data-bs-target="#editarModal">Editar</button>
+                              <button class="btn btn-danger btn-sm eliminarBtn" data-id="{{product_prov.id }}">Eliminar</button>
+                              
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </table>
+            </div>
+            <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <input type="hidden" name="csrfmiddlewaretoken" id="csrfToken" value="{{ csrf_token }}">
+        
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formularioEditar">
+                                <div class="mb-3">
+                                    <label for="nom_ing">Proveedor</label>
+                                    <input type="text" class="form-control" id="nom_ing" name="nom_ing">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cant_gramos">Ingrediente</label>
+                                    <input type="number" class="form-control" id="cant_gramos" name="cant_gramos">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cant_min">Precio</label>
+                                    <input type="number" class="form-control" id="cant_min" name="cant_min">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="precio_min">Celular proveedor</label>
+                                    <input type="number" class="form-control" id="precio_min" name="precio_min">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-success" id="guardarCambios">Guardar Cambios</button>
                         </div>
                     </div>
                 </div>
             </div>
+        
+        <!-- Añadir un input oculto para almacenar el ID del producto -->
+        <input type="hidden" id="idProductoEditar">
+            </div>
         </div>
     </div>
+</div>                        
 </main>
 
     <script src="{% static 'color-modes.js' %}"></script>

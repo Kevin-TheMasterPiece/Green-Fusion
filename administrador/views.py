@@ -287,7 +287,8 @@ def editar_producto(request):
 
 def prov_produc(request):
     ingredientes = ingrediente.objects.all()
-    return render(request, 'prov_produc.html', {'ingredientes': ingredientes})
+    product_provs= product_prov.objects.all()
+    return render(request, 'prov_produc.html', {'ingredientes': ingredientes, 'product_provs':product_provs})
 
 def gestion_recetario(request):
     return render(request, 'botones.html')
