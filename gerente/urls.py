@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import iniciar_sesion, empleados, crear_empleado, consultar_admin
-from .views import buscar_empleado, editar_empleado, eliminar_empleado
+from .views import buscar_empleado, editar_empleado, eliminar_empleado, mostrar_reclamo, borrar_reclamo
 urlpatterns = [
     path('iniciar_sesion/', iniciar_sesion, name='iniciar_sesion'),
     path('empleados/', empleados, name='empleados'),
@@ -9,6 +9,12 @@ urlpatterns = [
     path('buscar_empleado/', buscar_empleado, name='buscar_empleado'),
     path('editar_empleado/', editar_empleado, name='editar_empleado'),
     path('eliminar_empleado/', eliminar_empleado, name='eliminar_empleado'),
+
+    #reclamos
+
+    path('GEreclamos/', mostrar_reclamo, name='mostrar_reclamo'),
+    path('GEreclamos/<int:reclamo_id>/borrar/', borrar_reclamo, name='borrar_reclamo'),
 ]
+
 
 

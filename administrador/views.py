@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import  PreparadorForm, ProveedorForm, IngredienteForm
 from gerente.models import empleado
 from .models import proveedor, ingrediente, product_prov, ensaladas, recetas
@@ -9,6 +9,7 @@ from django.http import JsonResponse
 import base64
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
+from store.models import reclamo
 
 
 # Create your views here.
@@ -295,4 +296,17 @@ def agregar_ensalada(request):
     return render(request, 'EnsaladasPrep.html')
 def recetario(request):
     return render(request, 'recetario.html')
+
+def mostrar_reclamo(request):
+    reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)
+
+    return render(request, 'mostrar_reclamo_admin.html', {'reclamos_usuario': reclamos_usuario})
+                                                  
+def borrar_reclamo(request, reclamo_id):
+    reclamo_obj = get_object_or_404(reclamo, pk=reclamo_id)
+    if request.method == 'POST':
+        reclamo_obj.delete()
+        return redirect('admin:mostrar_reclamo_admin.html')
+    return render(request, 'mostrar_reclamo_admin.html', {'reclamo_borrar': reclamo_obj})
+
     

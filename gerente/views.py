@@ -1,11 +1,12 @@
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LoginForm, EmpleadoForm
 from .models import empleado
 from django.http import JsonResponse
 from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
 import base64
 from django.contrib import messages
+from store.models import reclamo
 
 
 def iniciar_sesion(request):
@@ -146,3 +147,15 @@ def eliminar_empleado(request):
             return JsonResponse({'success': False, 'message': str(e)})
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+def mostrar_reclamo(request):
+    reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)
+
+    return render(request, 'mostrar_reclamo_gerente.html', {'reclamos_usuario': reclamos_usuario})
+                                                  
+def borrar_reclamo(request, reclamo_id):
+    reclamo_obj = get_object_or_404(reclamo, pk=reclamo_id)
+    if request.method == 'POST':
+        reclamo_obj.delete()
+        return redirect('admin:mostrar_reclamo_admin.html')
+    return render(request, 'mostrar_reclamo_gerente.html', {'reclamo_borrar': reclamo_obj})
