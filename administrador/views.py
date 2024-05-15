@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render, redirect
 from .forms import  PreparadorForm, ProveedorForm, IngredienteForm
 from gerente.models import empleado
-from .models import proveedor, ingrediente, product_prov
+from .models import proveedor, ingrediente, product_prov, ensaladas, recetas
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -149,11 +149,8 @@ def crear_prov(request):
 def consultar_prov(request):    
     proveedores = proveedor.objects.all()
     return render(request, 'listadoprov.html', {'proveedores': proveedores})
-
 def Modificar_prov(request):
     return render(request, 'Modificar_prov.html')
-
-
 def buscar_prov(request):
     if request.method == 'GET' and 'nit' in request.GET:
         nit = request.GET['nit']
@@ -172,8 +169,6 @@ def buscar_prov(request):
         except ObjectDoesNotExist:
             return JsonResponse({'error': 'Proveedor no encontrado'}, status=404)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
 def editar_prov(request):
     if request.method == 'GET':
         nit = request.GET.get('nit')
@@ -296,5 +291,8 @@ def prov_produc(request):
 def gestion_recetario(request):
     return render(request, 'botones.html')
 
-  
+def agregar_ensalada(request):
+    return render(request, 'EnsaladasPrep.html')
+def recetario(request):
+    return render(request, 'recetario.html')
     
