@@ -288,7 +288,54 @@ def editar_producto(request):
 def prov_produc(request):
     ingredientes = ingrediente.objects.all()
     product_provs= product_prov.objects.all()
-    return render(request, 'prov_produc.html', {'ingredientes': ingredientes, 'product_provs':product_provs})
+    proveedores = proveedor.objects.all()
+    return render(request, 'prov_produc.html', {'ingredientes': ingredientes, 'product_provs':product_provs,  'proveedores': proveedores})
+
+def eliminar_product_prov(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        try:
+            Ingrediente = product_prov.objects.get(id=id_producto)
+            Ingrediente.delete()
+            return HttpResponse(json.dumps({'success': True}), content_type='application/json')
+        except ingrediente.DoesNotExist:
+            return HttpResponse(json.dumps({'success': False, 'message': 'No existe.'}), content_type='application/json')
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False, 'message': str(e)}), content_type='application/json')
+    else:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Método no permitido'}), content_type='application/json')
+
+from django.http import JsonResponse
+
+def editar_product_prov(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        FK_nit_prov = request.GET.get('FK_nit_prov')
+        FK_ID_ing = request.GET.get('FK_ID_ing')
+        precio_prov = request.GET.get('precio_prov')
+        
+        try:
+            ingrediente_editado = product_prov.objects.get(id=id_producto)
+            if precio_prov:
+                ingrediente_editado.precio_prov = precio_prov
+            if FK_nit_prov:
+                nuevo_proveedor = proveedor.objects.get(nit=FK_nit_prov)
+                ingrediente_editado.FK_nit_prov = nuevo_proveedor
+            
+            if FK_ID_ing:
+                nuevo_ingrediente = ingrediente.objects.get(ID_ing=FK_ID_ing)
+                ingrediente_editado.FK_ID_ing = nuevo_ingrediente
+            
+            ingrediente_editado.save()
+
+            return JsonResponse({'success': True})
+        except ingrediente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Error al editar: ingrediente no encontrado.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
 
 def gestion_recetario(request):
     return render(request, 'botones.html')

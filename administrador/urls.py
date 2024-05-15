@@ -20,7 +20,7 @@ from .views import (Vista_Admin, consultar_prep, crear_prep, Modificar_prep,
                     consultar_prov, crear_prov, Modificar_prov, buscar_prov,
                     editar_prov, eliminar_prov, gestion_inventario,
                     gestion_recetario, agregar_producto, consultar_producto, eliminar_producto, editar_producto,
-                    prov_produc, recetario, agregar_ensalada, mostrar_reclamo, borrar_reclamo)  # Asegúrate de importar agregar_producto desde tus vistas
+                    prov_produc, recetario, agregar_ensalada, mostrar_reclamo, borrar_reclamo, editar_product_prov, eliminar_product_prov)  
 urlpatterns = [
     path('Vista_Admin/', Vista_Admin, name='Vista_Admin'),
     
@@ -48,7 +48,8 @@ urlpatterns = [
 
     path('recetario/', recetario, name='recetario'),
     path('agregar_ensalada/', agregar_ensalada, name='agregar_ensalada'),
-
+    path('eliminar_product_prov/', eliminar_product_prov, name='eliminar_product_prov'),
+    path('editar_product_prov/', editar_product_prov, name='editar_product_prov'),
     #reclamos
 
     path('ADreclamos/', mostrar_reclamo, name='mostrar_reclamo'),
