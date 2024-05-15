@@ -85,7 +85,7 @@
 <header>
     <br>
     <div class="container">
-        <a href="index.html" class="text-success">
+        <a href="{% url 'store:mostrar_ensaladas' %}" class="text-success">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"  height="45px" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
               </svg>
@@ -107,10 +107,17 @@
                 <div class="col-md-5 col-lg-4 order-md-last">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Tu carrito</span>
-                    {% for item in cart %}
-                        <span class="badge bg-primary rounded-pill">{{ item.quantity }}</span>
+                    
+                        {% with total_items=cart|length %}
+                            {% if total_items > 0 %}
+                            <span id="contador-productos" class="badge bg-primary rounded-pill">{{ total_items }}</span>
+                            {% elif not order %}
+                            0
+                            {% endif %}
+                        {% endwith %}
                     </h4>
                     <ul class="list-group mb-3">
+                    {% for item in cart %}
                         <li class="list-group-item d-flex justify-content-between lh-sm">
                             <div>
                                 <h6 class="my-0">{{ item.product.nom_ensalada }}</h6>
@@ -132,10 +139,26 @@
                 </div>
                 <div class="col-md-7 col-lg-8">
                     <form method="post" class="needs-validation">
-                        {{ form.as_p }}
-                        <p><input type="submit" value="Realizar pedido"></p>
                         {% csrf_token %}
-                      </form>
+                        <div class="mb-3">
+                            <label for="{{ form.nom_client.id_for_label }}" class="form-label">{{ form.nom_client.label }}</label><br>
+                            {{ form.nom_client }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.apell_client.id_for_label }}" class="form-label">{{ form.apell_client.label }}</label><br>
+                            {{ form.apell_client }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.direccion.label }}</label><br>
+                            {{ form.direccion }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">{{ form.city.label }}</label><br>
+                            {{ form.city }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Realizar pedido</button>
+                    </form>
+                    
 
                 </div>
             </div>
