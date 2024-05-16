@@ -21,6 +21,7 @@ class factura (models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
+    preparada= models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created']
