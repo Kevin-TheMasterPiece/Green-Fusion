@@ -20,8 +20,8 @@ from .views import (Vista_Admin, consultar_prep, crear_prep, Modificar_prep,
                     consultar_prov, crear_prov, Modificar_prov, buscar_prov,
                     editar_prov, eliminar_prov, gestion_inventario,
                     gestion_recetario, agregar_producto, consultar_producto, eliminar_producto, editar_producto,
-                    prov_produc, recetario, agregar_ensalada, mostrar_reclamo, borrar_reclamo, editar_product_prov, eliminar_product_prov,
-                    agregar_product_prov)
+                    prov_produc, recetario, directorio_ensalada, mostrar_reclamo, borrar_reclamo, editar_product_prov, eliminar_product_prov,
+                    agregar_product_prov, agregar_ensalada_ing, eliminar_ensalada_ing, agregar_recetario, editar_recetario, eliminar_recetario)
   
 urlpatterns = [
     path('Vista_Admin/', Vista_Admin, name='Vista_Admin'),
@@ -49,11 +49,19 @@ urlpatterns = [
     path('proveedor_producto/', prov_produc, name='prov_produc'),
 
     path('recetario/', recetario, name='recetario'),
-    path('agregar_ensalada/', agregar_ensalada, name='agregar_ensalada'),
+    path('eliminar_recetario/', eliminar_recetario, name='eliminar_recetario'),
+    path('editar_recetario/', editar_recetario, name='editar_recetario'),
+    path('agregar_recetario/', agregar_recetario, name='agregar_recetario'),
+    
+    
+    
+    path('directorio_ensalada/', directorio_ensalada, name='directorio_ensalada'),
     path('eliminar_product_prov/', eliminar_product_prov, name='eliminar_product_prov'),
     path('editar_product_prov/', editar_product_prov, name='editar_product_prov'),
     path('agregar_product_prov/', agregar_product_prov, name='agregar_product_prov'),
 
+    path('eliminar_ensalada_ing/', eliminar_ensalada_ing, name='eliminar_ensalada_ing'),
+    path('agregar_ensalada_ing/', agregar_ensalada_ing, name='agregar_ensalada_ing'),
     #reclamos
 
     path('ADreclamos/', mostrar_reclamo, name='mostrar_reclamo'),

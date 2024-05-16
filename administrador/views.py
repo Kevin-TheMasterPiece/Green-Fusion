@@ -365,10 +365,118 @@ def agregar_product_prov(request):
 def gestion_recetario(request):
     return render(request, 'botones.html')
 
-def agregar_ensalada(request):
-    return render(request, 'EnsaladasPrep.html')
+def directorio_ensalada(request):
+    ingredientes = ingrediente.objects.all()
+    receta= recetas.objects.all()
+    ensalada= ensaladas.objects.all()
+    return render(request, 'EnsaladasPrep.html', {'ingredientes': ingredientes, 'receta':receta,  'ensalada': ensalada})
+
+def eliminar_ensalada_ing(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        try:
+            Ingrediente = recetas.objects.get(id=id_producto)
+            Ingrediente.delete()
+            return HttpResponse(json.dumps({'success': True}), content_type='application/json')
+        except ingrediente.DoesNotExist:
+            return HttpResponse(json.dumps({'success': False, 'message': 'No existe.'}), content_type='application/json')
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False, 'message': str(e)}), content_type='application/json')
+    else:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Método no permitido'}), content_type='application/json')
+
+def agregar_ensalada_ing(request):
+    if request.method == 'GET':
+        nueva_ensalada = request.GET.get('ensaladanueva')
+        nuevo_ingrediente = request.GET.get('ingredientenuevo')
+        
+        try:
+            nuevo_proveedor = ensaladas.objects.get(ID_ensalada=nueva_ensalada)
+            nuevo_ingrediente = ingrediente.objects.get(ID_ing=nuevo_ingrediente)
+            
+            nuevo_proveedor_ingrediente = recetas(
+                FK_ID_ensalada =nuevo_proveedor,
+                FK_ID_ing=nuevo_ingrediente,
+            )
+            nuevo_proveedor_ingrediente.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
 def recetario(request):
-    return render(request, 'recetario.html')
+    ingredientes = ingrediente.objects.all()
+    receta= recetas.objects.all()
+    ensalada= ensaladas.objects.all()
+    return render(request, 'recetario.html', {'ingredientes': ingredientes, 'receta':receta,  'ensalada': ensalada})
+
+def eliminar_recetario(request):
+    if request.method == 'GET':
+        id_producto = request.GET.get('idProducto')
+        try:
+            elimina = ensaladas.objects.get(ID_ensalada=id_producto)
+            elimina.delete()
+            return HttpResponse(json.dumps({'success': True}), content_type='application/json')
+        except ingrediente.DoesNotExist:
+            return HttpResponse(json.dumps({'success': False, 'message': 'No existe.'}), content_type='application/json')
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False, 'message': str(e)}), content_type='application/json')
+    else:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Método no permitido'}), content_type='application/json')
+
+from django.http import JsonResponse
+
+def editar_recetario(request):
+    if request.method == 'GET':
+        id_ensa = request.GET.get('idProducto')
+        foto = request.GET.get('FK_nit_prov')
+        nombre = request.GET.get('FK_ID_ing')
+        cate = request.GET.get('precio_prov')
+        
+        try:
+            ENSALADA_editado = ensaladas.objects.get(ID_ensalada=id_ensa)
+            if cate:
+                ENSALADA_editado.categoria = cate
+            if foto:
+                ENSALADA_editado.image = foto
+            
+            if nombre:
+                ENSALADA_editado.nom_ensalada = nombre
+            
+            ENSALADA_editado.save()
+
+            return JsonResponse({'success': True})
+        except ingrediente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Error al editar: ensalada no encontrado.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
+def agregar_recetario(request):
+    if request.method == 'GET':
+        recetaID = request.GET.get('recetaId')
+        imagen = request.GET.get('proveedor')
+        nom_ensa = request.GET.get('ingrediente')
+        categoriap = request.GET.get('precio')  # Corregido
+
+        try:  
+            nuevo_proveedor_ingrediente = ensaladas(
+                ID_ensalada=recetaID,
+                nom_ensalada=nom_ensa,
+                image=imagen,
+                categoria=categoriap  # Asignar categoriap a la categoría de la ensalada
+            )
+            nuevo_proveedor_ingrediente.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
 
 def mostrar_reclamo(request):
     reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)

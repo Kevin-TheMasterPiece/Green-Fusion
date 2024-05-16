@@ -4,9 +4,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva ensalada</title>
+    <title>Ing_ensalada</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -83,12 +84,126 @@
       </header>
       
       <main>
-      <!-- ensaladas.html -->
+        <div class="container">
+            <div class="py-3 text-center">
+                <h2>Ingredientes de las ensaladas</h2>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <select id="ensaladaSelect" class="form-select mb-3" aria-label="Seleccionar proveedor">
+                        <option selected disabled>Seleccionar Ensalada</option>
+                        {% for ensaladas in ensalada %}
+                        <option value="{{ ensaladas.ID_ensalada }}">{{ ensaladas.nom_ensalada }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="ingredienteSelect" class="form-select mb-3" aria-label="Seleccionar ingrediente">
+                        <option selected disabled>Seleccionar ingrediente</option>
+                        {% for ingrediente in ingredientes %}
+                        <option value="{{ ingrediente.ID_ing }}">{{ ingrediente.nom_ing }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="agregarBtn" class="btn btn-success">Agregar</button>
+                </div>
+                <input type="hidden" name="csrfmiddlewaretoken" id="csrfToken" value="{{ csrf_token }}">
 
+            </div>
+            <table id="productTable" class="table">
+                <thead class="thead-success">
+                    <tr>
+                        <th>Ensalada</th>
+                        <th>Ingrediente</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="productBody">
+                    {% for recetas in receta %}
+                    <tr id="fila-{{ recetas.id }}">
+                        <td>{{ recetas.FK_ID_ensalada }}</td>
+                        <td>{{ recetas.FK_ID_ing }}</td>
+                        <td>
+                            <button class="btn btn-danger btn eliminarBtn" data-id="{{ recetas.id }}">Eliminar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var eliminarButtons = document.querySelectorAll('.eliminarBtn');
+            eliminarButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    var idProducto = event.target.dataset.id;
+                    var url = '/administrador/eliminar_ensalada_ing/?idProducto=' + idProducto;
+    
+                    fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Error en la solicitud');
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert('Relacion eliminada correctamente');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Se produjo un error al intentar eliminar la relación');
+                    });                      
+                });
+            });
+    
+            document.getElementById('agregarBtn').addEventListener('click', function() {
+                var ensaladanueva = document.getElementById('ensaladaSelect').value;
+                var ingredientenuevo = document.getElementById('ingredienteSelect').value;
+    
+                var csrftoken = document.getElementById('csrfToken').value; // Obtener el valor del token CSRF
+                var data = {
+                    ensaladanueva: ensaladanueva,
+                    ingredientenuevo: ingredientenuevo,
+                    csrfmiddlewaretoken: csrftoken // Agregar el token CSRF en los datos
+                };
+                console.log('datos a elied:', ensaladanueva)
+                console.log('datos a elied:', ingredientenuevo)
 
-
-      <script src="{% static 'color-modes.js' %}"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                // Construir la URL con los parámetros de los datos
+                var url = '/administrador/agregar_ensalada_ing/?' + new URLSearchParams(data);
+    
+                fetch(url, {
+                    method: 'GET', // El método GET es por defecto, pero puedes dejarlo explícitamente si lo prefieres
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken // Asegúrate de que esto obtenga el token CSRF correcto desde Django
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Ingrediente agregado exitosamente en la receta.');
+                        location.reload(); // Recargar la página para mostrar los cambios actualizados
+                    } else {
+                        throw new Error('Error al agregar el ingrediente a la ensalada.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Se produjo un error al intentar agregar el ingrediente a la ensalada.');
+                });
+            });
+        });
+    </script>
+    
+    
+      
+  <script src="{% static 'color-modes.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

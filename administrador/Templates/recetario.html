@@ -83,13 +83,321 @@
         </div>
       </header>
       
-      <main>
-      <!-- ensaladas.html -->
+      
+<main>
+  <div class="b-example-divider"></div>
+  <div class="container-fluid pb-2">
+      <div class="row">
+       
+              <div class="bg-body-tertiary border rounded-0">
+                  <div class="py-3 text-center">
+                      <h2>RECETARIO</h2>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-md-2">
+                      <input type="number" class="form-control" id="ID" placeholder="ID" min="0" step="1">
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" class="form-control" id="nom_ensalada" placeholder="Nombre" min="0" step="0.01">
+                </div>
+                <div class="col-md-2">
+                  <input type="text" class="form-control" id="imagen" placeholder="Foto" min="0" step="0.01">
+                </div>
+                    <div class="col-md-3">
+                      <select id="categoria" class="form-select mb-3" aria-label="Categoria">
+                        <option selected disabled>Categoria</option>           
+                        <optgroup label="Ensaladas Verdes">
+                            <option value="lechuga">Lechuga</option>
+                            <option value="espinacas">Espinacas</option>
+                            <option value="rucula">Rúcula</option>
+                            <option value="canonigos">Canónigos</option>
+                            <option value="berros">Berros</option>
+                            <option value="brotes_de_albahaca">Brotes de Albahaca</option>
+                        </optgroup>
+                        <optgroup label="Vegetales">
+                            <option value="tomate">Tomate</option>
+                            <option value="pepino">Pepino</option>
+                            <option value="cebolla">Cebolla</option>
+                            <option value="zanahoria">Zanahoria</option>
+                            <option value="pimiento_rojo">Pimiento Rojo</option>
+                            <option value="pimiento_verde">Pimiento Verde</option>
+                        </optgroup>
+                        <optgroup label="Proteínas">
+                            <option value="pollo">Pollo a la parrilla</option>
+                            <option value="atun">Atún en lata</option>
+                            <option value="tofu">Tofu</option>
+                            <option value="huevo_cocido">Huevo Cocido</option>
+                            <option value="garbanzos">Garbanzos</option>
+                            <option value="lentejas">Lentejas</option>
+                        </optgroup>
+                        <optgroup label="Frutas">
+                            <option value="fresas">Fresas</option>
+                            <option value="manzana">Manzana</option>
+                            <option value="pera">Pera</option>
+                            <option value="uvas">Uvas</option>
+                            <option value="naranja">Naranja</option>
+                            <option value="arandanos">Arándanos</option>
+                        </optgroup>
+                        <optgroup label="Frutos Secos">
+                            <option value="nueces">Nueces</option>
+                            <option value="almendras">Almendras</option>
+                            <option value="avellanas">Avellanas</option>
+                            <option value="cacahuetes">Cacahuetes</option>
+                            <option value="pistachos">Pistachos</option>
+                            <option value="piñones">Piñones</option>
+                        </optgroup>
+                    </select>
+                    </div>
+                    <div class="col-md-2">
+                      <button id="agregarBtn" class="btn btn-success">Agregar</button>
+                  </div>
+                  
+  
+                </div>
+                  <table id="productTable" class="table">
+                      <thead class="thead-success">
+                          <tr>
+                              <th>Foto</th>
+                              <th>Nombre</th>
+                              <th>Categoria </th>
+                              <th>Ingredientes </th>
+                              <th>Acción </th>
 
-    </main>
+                          </tr>
+                      </thead>
+                      <tbody id="productBody">
+                          {% for ensaladas in ensalada %}
+                          <tr id="fila-{{ ensaladas.ID_ensalada }}">
+                            <td><img src="{{ ensaladas.image }}" alt="Imagen de {{ ensaladas.nom_ensalada }}" width="200"></td>
+                              <td>{{ ensaladas.nom_ensalada}}</td>
+                              <td>{{ ensaladas.categoria }}</td>
+                              <td>
+                                {% for ingrediente in ensaladas.ingredientes.all %}
+                                    {{ ingrediente.nom_ing }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>                              <td>
+                                <button class="btn btn-success btn-sm editarBtn" data-id="{{ensaladas.ID_ensalada }}" data-bs-toggle="modal" data-bs-target="#editarModal">Editar</button>
+                                <button class="btn btn-danger btn-sm eliminarBtn" data-id="{{ensaladas.ID_ensalada }}">Eliminar</button>
+                                
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+     
 
+          <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <input type="hidden" name="csrfmiddlewaretoken" id="csrfToken" value="{{ csrf_token }}">
+      
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="formularioEditar">
+                            <div class="mb-3">
+                                <label for="forito">Foto</label>
+                                <input type="text" class="form-control" id="fotito" name="fotito">
+                            </div>
+                            <div class="mb-3">
+                              <label for="nombe_ensalada">Nombre ensalada</label>
+                              <input type="text" class="form-control" id="nombe_ensalada" name="nombe_ensalada">
+                            </div>                   
+                            <div class="col-md-3">
+                                 <select id="categora" class="form-select mb-3" aria-label="Categoria">
+                                    <option value="" selected disabled>Categoria</option>           
+                                    <optgroup label="Ensaladas Verdes">
+                                        <option value="lechuga">Lechuga</option>
+                                        <option value="espinacas">Espinacas</option>
+                                        <option value="rucula">Rúcula</option>
+                                        <option value="canonigos">Canónigos</option>
+                                        <option value="berros">Berros</option>
+                                        <option value="brotes_de_albahaca">Brotes de Albahaca</option>
+                                    </optgroup>
+                                    <optgroup label="Vegetales">
+                                        <option value="tomate">Tomate</option>
+                                        <option value="pepino">Pepino</option>
+                                        <option value="cebolla">Cebolla</option>
+                                        <option value="zanahoria">Zanahoria</option>
+                                        <option value="pimiento_rojo">Pimiento Rojo</option>
+                                        <option value="pimiento_verde">Pimiento Verde</option>
+                                    </optgroup>
+                                    <optgroup label="Proteínas">
+                                        <option value="pollo">Pollo a la parrilla</option>
+                                        <option value="atun">Atún en lata</option>
+                                        <option value="tofu">Tofu</option>
+                                        <option value="huevo_cocido">Huevo Cocido</option>
+                                        <option value="garbanzos">Garbanzos</option>
+                                        <option value="lentejas">Lentejas</option>
+                                    </optgroup>
+                                    <optgroup label="Frutas">
+                                        <option value="fresas">Fresas</option>
+                                        <option value="manzana">Manzana</option>
+                                        <option value="pera">Pera</option>
+                                        <option value="uvas">Uvas</option>
+                                        <option value="naranja">Naranja</option>
+                                        <option value="arandanos">Arándanos</option>
+                                    </optgroup>
+                                    <optgroup label="Frutos Secos">
+                                        <option value="nueces">Nueces</option>
+                                        <option value="almendras">Almendras</option>
+                                        <option value="avellanas">Avellanas</option>
+                                        <option value="cacahuetes">Cacahuetes</option>
+                                        <option value="pistachos">Pistachos</option>
+                                        <option value="piñones">Piñones</option>
+                                    </optgroup>
+                                </select>
+                            </div>                     
+                    
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-success" id="guardarCambios">Guardar Cambios</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      
+      
+      <input type="hidden" id="idProductoEditar">
+          </div>
+      </div>
+  </div>
+</div>                        
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+      var idProductoEditar; // Variable global para almacenar el ID del producto a editar
+      
+      // Manejar clic en el botón "Editar"
+      var editarButtons = document.querySelectorAll('.editarBtn');
+      editarButtons.forEach(function(button) {
+          button.addEventListener('click', function(event) {
+            idProductoEditar = event.target.dataset.id; // Almacenar el ID del producto a editar
+            console.log('ID del producto a editar:', idProductoEditar); // Imprimir el ID del producto en la consola
+          });
+      });
 
-      <script src="{% static 'color-modes.js' %}"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      document.getElementById('guardarCambios').addEventListener('click', function() {
+        var FK_nit_prov = document.getElementById('fotito').value;
+        var FK_ID_ing = document.getElementById('nombe_ensalada').value;
+        var precio_prov = document.getElementById('categora').value;
+
+        var csrftoken = document.getElementById('csrfToken').value; // Obtener el valor del token CSRF
+        var data = {
+            idProducto: idProductoEditar, // Usar el ID del producto almacenado en la variable global
+            FK_ID_ing: FK_ID_ing,
+            FK_nit_prov: FK_nit_prov,
+            precio_prov: precio_prov,
+            csrfmiddlewaretoken: csrftoken
+        };
+
+        // Construir la URL con los parámetros de los datos
+        var url = '/administrador/editar_recetario/?' + new URLSearchParams(data);
+
+        fetch(url, {
+            method: 'GET', // Mantener el método como GET
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Error en la solicitud');
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Receta editada correctamente');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Se produjo un error al intentar editar la receta');
+        });                      
+      });
+
+      var eliminarButtons = document.querySelectorAll('.eliminarBtn');
+      eliminarButtons.forEach(function(button) {
+          button.addEventListener('click', function(event) {
+              var idProducto = event.target.dataset.id;
+              console.log('ID del producto a eliminar:', idProducto);
+              var url = '/administrador/eliminar_recetario/?idProducto=' + idProducto;
+              
+              fetch(url)
+              .then(response => {
+                  if (response.ok) {
+                      return response.json();
+                  }
+                  throw new Error('Error en la solicitud');
+              })
+              .then(data => {
+                  if (data.success) {
+                      alert('Ensalada eliminada correctamente');
+                      location.reload();
+                  } else {
+                      alert('Error: ' + data.message);
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('Se produjo un error al intentar eliminar la ensalada');
+              });                      
+          });
+      });
+ 
+  document.getElementById('agregarBtn').addEventListener('click', function() {
+    var recetaId = document.getElementById('ID').value;
+    var proveedorId = document.getElementById('imagen').value;
+    var ingredienteId = document.getElementById('nom_ensalada').value;
+    var precio = document.getElementById('categoria').value;
+
+    var csrftoken = document.getElementById('csrfToken').value; // Obtener el valor del token CSRF
+    var data = {
+        recetaId: recetaId,
+        proveedor: proveedorId,
+        ingrediente: ingredienteId,
+        precio: precio,
+        csrfmiddlewaretoken: csrftoken
+    };
+
+    // Construir la URL con los parámetros de los datos
+        var url = '/administrador/agregar_recetario/?' + new URLSearchParams(data);
+
+        fetch(url, {
+            method: 'GET', // El método GET es por defecto, pero puedes dejarlo explícitamente si lo prefieres
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken // Asegúrate de que esto obtenga el token CSRF correcto desde Django
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Receta agregado exitosamente.');
+                location.reload(); // Recargar la página para mostrar los cambios actualizados
+            } else {
+                throw new Error('Error al agregar receta.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Se produjo un error al intentar agregar la receta.');
+        });
+      });
+    });
+
+</script>
+  <script src="{% static 'color-modes.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
