@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LoginForm, EmpleadoForm
 from .models import empleado
 from django.http import JsonResponse
-from .models import empleado  # Asegúrate de importar tu modelo empleado correctamente
+from administrador.models import recetas,ensaladas, product_prov,proveedor, ingrediente
 import base64
 from django.contrib import messages
 from store.models import reclamo
@@ -122,8 +122,6 @@ def editar_empleado(request):
         return JsonResponse({'Error': 'Método no permitido'}, status=405)
     
 
-
-
 def eliminar_empleado(request):
     if request.method == 'GET':
         cedula = request.GET.get('cedula')  # Obtener la cédula del empleado a eliminar
@@ -148,14 +146,21 @@ def eliminar_empleado(request):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
     
-def mostrar_reclamo(request):
+def mostrar_reclamoo(request):
     reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)
-
     return render(request, 'mostrar_reclamo_gerente.html', {'reclamos_usuario': reclamos_usuario})
                                                   
 def borrar_reclamo(request, reclamo_id):
     reclamo_obj = get_object_or_404(reclamo, pk=reclamo_id)
     if request.method == 'POST':
         reclamo_obj.delete()
-        return redirect('admin:mostrar_reclamo_admin.html')
+        return redirect('mostrar_reclamo_gerente.html')
     return render(request, 'mostrar_reclamo_gerente.html', {'reclamo_borrar': reclamo_obj})
+
+def directorio(request):
+    ingredientes = ingrediente.objects.all()
+    receta= recetas.objects.all()
+    ensalada= ensaladas.objects.all()
+    product_provs= product_prov.objects.all()
+    proveedores = proveedor.objects.all()
+    return render(request, 'ver_inventario.html', {'ingredientes': ingredientes, 'product_provs':product_provs,  'proveedores': proveedores, 'receta':receta,  'ensalada': ensalada})

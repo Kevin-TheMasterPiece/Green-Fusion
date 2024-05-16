@@ -479,7 +479,7 @@ def agregar_recetario(request):
 
 
 def mostrar_reclamo(request):
-    reclamos_usuario = reclamo.objects.filter(FK_ced_client=request.user)
+    reclamos_usuario = reclamo.objects.all()
 
     return render(request, 'mostrar_reclamo_admin.html', {'reclamos_usuario': reclamos_usuario})
                                                   

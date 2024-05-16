@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reclamo</title>
+  <title>Directorio</title>
   <link rel="stylesheet" href="stile.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="{% static 'stile.css' %}">
@@ -193,46 +193,78 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
         </div>
       </div>
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <h2>Reclamos realizados</h2>
-
-        <ul>
-            <div class="album py-5 bg-body">
-                
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                        {% for reclamo in reclamos_usuario %}
-                        <div class="col">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <p>Usuario: {{ reclamo.FK_ced_client }}</p>
-                                    <p>Descripción: {{ reclamo.des_recla }}</p>
-                                    <p>Fecha: {{ reclamo.fecha_reclamo }}</p>
-                                    <p>Foto: <img src="{{ reclamo.foto_reclamo.url }}" alt="Foto de reclamo"
-                                        width="100%"
-                                        height="150px"></p>
-
-                                    <form action="{% url 'borrar_reclamo' reclamo.id %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-danger float-end">Eliminar
-                                            reclamo</button>
-                                    </form>
-                                </div>
-                            </div>
+       
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bg-body-tertiary border rounded-0">
+                        <div class="py-3 text-center">
+                            <h2>Recetario</h2>
                         </div>
-
-                        {% empty %}
-                        <li>No se han realizado reclamos</li>
-                        {% endfor %}
-            
-                    </div>        
-                
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-success">
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Nombre</th>
+                                    <th>Categoria</th>
+                                    <th>Ingredientes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ensaladas in ensalada %}
+                                <tr>
+                                    <td><img src="{{ ensaladas.image }}" alt="Imagen de {{ ensaladas.nom_ensalada }}" width="100"></td>
+                                    <td>{{ ensaladas.nom_ensalada }}</td>
+                                    <td>{{ ensaladas.categoria }}</td>
+                                    <td>
+                                        {% for ingrediente in ensaladas.ingredientes.all %}
+                                        {{ ingrediente.nom_ing }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-body-tertiary border rounded-0">
+                        <div class="py-3 text-center">
+                            <h2>Proveedores</h2>
+                        </div>
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-success">
+                                <tr>
+                                    <th>Proveedor</th>
+                                    <th>Celular</th>
+                                    <th>Ingrediente</th>
+                                    <th>Precio por bulto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product_prov in product_provs %}
+                                <tr>
+                                    <td>{{ product_prov.FK_nit_prov }}</td>
+                                    <td>{{ product_prov.FK_nit_prov.tel_prov }}</td>
+                                    <td>{{ product_prov.FK_ID_ing }}</td>
+                                    <td>{{ product_prov.precio_prov }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
+        </div>                      
     </main>
+    
+    
+    </div>
+  </div>
 
-    <script src="{% static 'color-modes.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+<script src="{% static 'color-modes.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
-
 </html>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Consultar</title>
     <link rel="stylesheet" href="stile.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" type="text/css" href="{% static 'stile.css' %}" />
@@ -133,27 +133,23 @@
     </svg>
 
     <header class="navbar fixed-top bg-success flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">Green Fusion</a>
-
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="{% url 'empleados' %}">Green Fusion</a>
+    
       <ul class="navbar-nav flex-row d-md-none">
         <li class="nav-item text-nowrap">
           <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
-            <svg class="bi">
-              <use xlink:href="#search" />
-            </svg>
+            <svg class="bi"><use xlink:href="#search"/></svg>
           </button>
         </li>
         <li class="nav-item text-nowrap">
           <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <svg class="bi">
-              <use xlink:href="#list" />
-            </svg>
+            <svg class="bi"><use xlink:href="#list"/></svg>
           </button>
         </li>
       </ul>
-
+    
       <div id="navbarSearch" class="navbar-search w-100 collapse">
-        <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" />
+        <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
       </div>
     </header>
 
@@ -168,54 +164,41 @@
             <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
               <ul class="nav flex-column">
                 <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'empleados' %}">
-                    <svg class="bi">
-                      <use xlink:href="#people" />
-                    </svg>Lista Empleados
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'crear_empleado' %}">
-                    <svg class="bi">
-                      <use xlink:href="#people" />
-                    </svg>Registro Administrador
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'consultar_admin' %}">
-                    <svg class="bi">
-                      <use xlink:href="#people" />
-                    </svg>Consulta Empleado
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
-                    <svg class="bi">
-                      <use xlink:href="#file-earmark" />
-                    </svg>Reclamos
-                  </a>
-                  <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
-                      <svg class="bi">
-                        <use xlink:href="#puzzle" />
-                      </svg>Puntuaciones
-                    </a>
-                  </li>
-            
-                <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
-                    <svg class="bi">
-                      <use xlink:href="#cart" />
-                    </svg>Inventario
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
-                    <svg class="bi">
-                      <use xlink:href="#graph-up" />
-                    </svg>Ventas
-                  </a>
-                </li>
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'empleados' %}">
+                  <svg class="bi"><use xlink:href="#people"/></svg>
+                  Lista Empleados
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'crear_empleado' %}">
+                  <svg class="bi"><use xlink:href="#people"/></svg>
+                  Registro Administrador
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'consultar_admin' %}">
+                  <svg class="bi"><use xlink:href="#people"/></svg>
+                  Consulta Empleado
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'mostrar_reclamoo' %}">
+                  <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+                  Reclamos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'directorio' %}">
+                  <svg class="bi"><use xlink:href="#puzzle" /></svg>
+                    Inventario
+                </a>
+            </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
+                          <svg class="bi"><use xlink:href="#graph-up"/></svg>
+                          Ventas
+                        </a>
+                      </li>
               </ul>
             </div>
           </div>
