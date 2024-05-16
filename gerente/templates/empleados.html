@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Empleados</title>
   <link rel="stylesheet" href="stile.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="{% static 'stile.css' %}">
@@ -118,7 +118,7 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
   </svg>
   
   <header class="navbar fixed-top bg-success flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">Green Fusion</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="{% url 'empleados' %}">Green Fusion</a>
   
     <ul class="navbar-nav flex-row d-md-none">
       <li class="nav-item text-nowrap">
@@ -167,14 +167,14 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'mostrar_reclamo' %}">
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'mostrar_reclamoo' %}">
                   <svg class="bi"><use xlink:href="#file-earmark"/></svg>
                   Reclamos
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2 text-success" href="#">
-                  <svg class="bi"><use xlink:href="#cart"/></svg>
+                <a class="nav-link d-flex align-items-center gap-2 text-success" href="{% url 'directorio' %}">
+                  <svg class="bi"><use xlink:href="#puzzle" /></svg>
                     Inventario
                 </a>
             </li>
@@ -186,7 +186,6 @@ class="d-flex align-items-center py-4 bg-body-tertiary">
                       </li>
                 </a>
               </li>
-              
                 </a>
               </li>
             </ul>
