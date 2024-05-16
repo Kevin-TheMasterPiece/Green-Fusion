@@ -110,48 +110,63 @@
         <main class="px-3">
             <h1>Formulario de modifición</h1>
         </main>
-        <form>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'modificar_ingrediente' %}">
+            {% csrf_token %}
             <fieldset disabled></fieldset>
             <div class="mb-3">
-                <label for="disabledSelect" class="form-label">Fecha de modificación</label>
-                <select id="disabledSelect" class="form-select">
-                    <option>Disabled select</option>
-                </select>
+                <label for="fecha-modificacion" class="form-label">Fecha de modificación</label>
+                <input type="text" class="form-control" id="fecha-modificacion" disabled>
             </div>
-
             </fieldset>
             <div class="row g-2">
                 <div class="col-md">
                     <div class="form-floating">
-                        <select class="form-select" id="floatingSelectGrid">
-                            <option selected>Seleccionar </option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select name="ingrediente" class="form-select mb-3" aria-label="Seleccionar ingrediente">
+                            <option selected disabled> Seleccionar ingrediente</option>
+                            {% for ingrediente in ingredientes %}
+                                <option value="{{ ingrediente.ID_ing }}">{{ ingrediente.nom_ing }}</option>
+                            {% endfor %}
                         </select>
-                        <label for="floatingSelectGrid">Eliga el producto a modificar</label>
+                        <label for="floatingSelectGrid">Elige el ingrediente a modificar</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="number" class="form-control" id="floatingInputGrid" placeholder="name@example.com"
-                            value="Ingrese la cantidad en gramos" step="0.01" min="0">
+                        <input type="number" name="cantidad" class="form-control" id="floatingInputGrid" placeholder="Ingrese la cantidad en gramos" step="0.01" min="0">
                         <label for="floatingInputGrid">Cantidad a disminuir en gramos</label>
                     </div>
                 </div>
-
             </div>
-            <br>
+
             <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                    style="height: 100px"></textarea>
-                <label for="floatingTextarea2">Motivo</label>
+                <select name="motivo" class="form-select" id="floatingSelectGrid">
+                    <option selected>Motivo</option>
+                    <option value="1">Ingrediente dañado</option>
+                    <option value="2">Ingrediente reemplazado</option>
+                    <option value="3">Otro</option>
+                </select>
+                <label for="floatingSelectGrid">Motivo modificación</label>
             </div>
             <br>
             <button type="submit" class="btn btn-success">Enviar</button>
             <br>
         </form>
+
     </div>
+    <script>
+        var fechaActual = new Date();
+        var campoFecha = document.getElementById('fecha-modificacion');
+        var fechaFormateada = fechaActual.toISOString().split('T')[0];
+        campoFecha.value = fechaFormateada;
+    </script>
     
     <script src="{% static 'color-modes.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
