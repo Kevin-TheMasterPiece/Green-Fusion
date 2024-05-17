@@ -1,13 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="{% static 'stile.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
   <title>Pedidos</title>
-  <link href="headers.css" rel="stylesheet">
-  <link href="style.css">
+  <link href="{% static 'headers.css' %}" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -18,26 +18,33 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+          <use xlink:href="#bootstrap" />
+        </svg>
       </a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{% url 'pedidos' %}" class="nav-link px-2 link-body-emphasis text-white">Pedidos</a></li>
-        <li><a href="{% url 'inventariopreparador' %}" class="nav-link px-2 link-body-emphasis text-white">Inventario</a></li>
+        <li><a href="{% url 'inventariopreparador' %}"
+            class="nav-link px-2 link-body-emphasis text-white">Inventario</a></li>
       </ul>
       <div class="dropdown text-end">
-        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+          aria-expanded="false">
           <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
           <li><a class="dropdown-item" href="#">Cerrar sesion</a></li>
         </ul>
       </div>
     </div>
   </div>
 </header>
+
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
     <symbol id="check2" viewBox="0 0 16 16">
@@ -108,31 +115,78 @@
   <div class="b-example-divider"></div>
   <div class="container-fluid pb-3">
     <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;">
+
+
       <div class="bg-body-tertiary border rounded-3">
-        <br><br><br><br><br><br><br><br><br><br>
+
+        <ul class="list-group mb-3">
+          {% for pedido in pedidos %}
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+
+            <span class="text-body">
+              Pedido: {{pedido.id}}
+            </span>
+
+            <span class="text-body-secondary">
+              Ensaladas: {{pedido.items.count}}
+            </span>
+
+            <span class="text-body">
+              <a href="{% url 'pedido_detalle' pedido.id%}" class="btn btn-primary">Tomar</a>
+            </span>
+
+          </li>
+          {% endfor %}
+        </ul>
+
       </div>
+
+
       <div class="bg-body-tertiary border rounded-3">
-        <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalChoice">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content rounded-3 shadow">
-              <div class="modal-body p-4 text-center">
-                <h5 class="mb-0">Pedido</h5>
-                <p class="mb-0">Descripción del pedido</p>
-              </div>
-              <div class="modal-footer flex-nowrap p-0">
-                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end"><strong>Finalizado</strong></button>
-                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0" data-bs-dismiss="modal">Volver a pedidos</button>
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <ul class="list-group mb-3">
+          {% for p in pedido %}
+              {% for item in p.items.all %}
+                  <li class="list-group-item d-flex justify-content-between lh-sm">
+                      <div>
+                          <h6 class="text-body">
+                              Ensalada: {{ item.FK_ensalada.nom_ensalada }}
+                          </h6>
+                          <p class="text-body">
+                              Tamaño: {{ item.tamaño }}
+                          </p>
+                          <p class="text-body">
+                              Cantidad: {{ item.quantity }}
+                          </p>
+                          <p class="text-body">
+                              Ingredientes:
+                              <ul>
+                                  {% for ingrediente in ingredientes %}
+                                      <li>{{ ingrediente.nom_ing }}</li>
+                                  {% endfor %}
+                              </ul>
+                          </p>
+                      </div>
+                  </li>
+              {% empty %}
+                  <li>No has tomado ningun pedido</li>
+              {% endfor %}
+          {% empty %}
+              No has tomado ningun pedido
+          {% endfor %}
+      </ul>
+      
+
+
+
         <br><br><br><br><br><br><br><br><br><br>
       </div>
     </div>
   </div>
   <script src="{% static 'color-modes.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

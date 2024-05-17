@@ -123,7 +123,7 @@
                 <li class="nav-item"><a href="{% url 'store:crear_reclamo' %}" class="nav-link link-body-emphasis px-2">
                         <button class="btn btn-primary">Reclamo</button></a></li>
                 <li></li>
-                <div class="container-car">
+                <div class="container-car position-relative">
                     <a href="{% url 'cart:cart_detail' %}" class="nav-link link-body-emphasis px-2 text-white"><svg
                             xmlns="http://www.w3.org/2000/svg" fill="none" width="40px" height="40px"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -133,9 +133,9 @@
                         <div class="count-products">
                             {% with total_items=cart|length %}
                             {% if total_items > 0 %}
-                            <span id="contador-productos">{{ total_items }}</span>
+                            <span id="contador-productos" class="badge position-absolute top-52  end-0 translate-middle bg-dark text-light rounded-circle p-1">{{ total_items }}</span>
                             {% elif not order %}
-                            0
+                            <span id="contador-productos" class="badge position-absolute top-52  end-0 translate-middle bg-dark text-light rounded-circle p-1">{{ total_items }}</span>
                             {% endif %}
                             {% endwith %}
                             
